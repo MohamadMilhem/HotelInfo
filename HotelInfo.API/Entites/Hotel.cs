@@ -17,9 +17,14 @@ namespace HotelInfo.API.Entites
         public int CityId { get; set; }
         [Required]
         [MaxLength(500)]
+        public string Description { get; set; } = null!;
         public HotelType HotelType { get; set; }
+        public int StarRating { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
+        public IEnumerable<Room> Rooms { get; set; } = new List<Room>();
 
-        public Hotel(string name, string thumbnailImageUrl) 
+        public Hotel(string name) 
         {
             Name = name;
         }

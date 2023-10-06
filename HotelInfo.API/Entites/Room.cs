@@ -7,12 +7,15 @@ namespace HotelInfo.API.Entites
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [MaxLength(50)]
         public string RoomNumber { get; set; } = null!;
+        public Hotel? Hotel { get; set; }
+        [ForeignKey(nameof(HotelId))]
+        public int HotelId { get; set; }
 
-        public Room( string roomNumber, string thumbnailImageUrl)
+        public Room( string roomNumber)
         {
 
             RoomNumber = roomNumber;
