@@ -15,7 +15,7 @@ namespace HotelInfo.API.Entites
         [Required]
         [MaxLength(500)]
         public string Description { get; set; } = null!;
-        public IEnumerable<Hotel> Hotels { get; set; } = new List<Hotel>(); 
+        public ICollection<Hotel> Hotels { get; set; } = new List<Hotel>(); 
         
         public City(string name) 
         {

@@ -22,7 +22,7 @@ namespace HotelInfo.API.Entites
         public int StarRating { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
-        public IEnumerable<Room> Rooms { get; set; } = new List<Room>();
+        public ICollection<Room> Rooms { get; set; } = new List<Room>();
 
         public Hotel(string name) 
         {
