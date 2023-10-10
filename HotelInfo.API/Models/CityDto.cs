@@ -9,6 +9,6 @@ namespace HotelInfo.API.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public ICollection<HotelDto> Hotels { get; set; } = new List<HotelDto>();
+        public ICollection<HotelWithoutRooms> Hotels { get; set; } = new List<HotelWithoutRooms>();
     }
 }
