@@ -79,6 +79,34 @@ namespace HotelInfo.API.Controllers
             return NoContent();
         }
 
+        [HttpPatch("{hotelId}")]
+        public async Task<ActionResult> PartiallyUpdateHotel(int hotelId,
+            JsonPatchDocument<HotelForUpdateDto> patchDocument)
+        {
+
+            var hotelEntity = await _hotelInfoRepository.GetHotelAsync(hotelId, false);
+
+            if (hotelEntity == null)
+            {
+                return NotFound();
+            }
+
+            var hotelToUpdate = _mapper.Map<HotelForUpdateDto>(hotelEntity);
+
+            patchDocument.ApplyTo(hotelToUpdate);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _mapper.Map(hotelToUpdate, hotelEntity);
+
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
     }
 }
