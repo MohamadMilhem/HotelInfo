@@ -37,7 +37,7 @@ namespace HotelInfo.API.Controllers
             return Ok(results);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetCity")]
         public async Task<IActionResult> GetCityAsync(int id, bool includeHotels = false)
         {
             var city = await _hotelInfoRepository.GetCityAsync(id, includeHotels);
@@ -54,6 +54,21 @@ namespace HotelInfo.API.Controllers
 
             return Ok(_mapper.Map<CityWithoutHotels>(city));
 
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<CityDto>> CreateCity(CityForCreationDto city)
+        {
+            var cityToStore = _mapper.Map<Entites.City>(city);
+
+            await _hotelInfoRepository.CreateCityAsync(cityToStore);
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            var cityToReturn = _mapper.Map<CityDto>(cityToStore);
+
+            return CreatedAtRoute("GetCity",
+                new { id = cityToReturn.Id },
+                cityToReturn);
         }
 
     }
