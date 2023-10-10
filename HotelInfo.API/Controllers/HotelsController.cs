@@ -143,5 +143,31 @@ namespace HotelInfo.API.Controllers
 
         }
 
+        [HttpDelete("{hotelId}/rooms/{roomId}")]
+        public async Task<ActionResult> DeletePointOfInterest(int hotelId, int roomId)
+        {
+            if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
+            {
+                return NotFound();
+            }
+
+            var hotel = await _hotelInfoRepository.GetHotelAsync(hotelId, true);
+
+            var roomToDelete = hotel.Rooms
+                .Where(room => room.Id == roomId)
+                .SingleOrDefault();
+
+            if (roomToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _hotelInfoRepository.DeleteRoom(roomToDelete);
+
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
     }
 }
