@@ -1,3 +1,6 @@
+using HotelInfo.API.DbContexts;
+using HotelInfo.API.Services;
+
 namespace HotelInfo.API
 {
     public class Program
@@ -13,7 +16,15 @@ namespace HotelInfo.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+
+            builder.Services.AddDbContext<HotelInfoContext>();
+            builder.Services.AddScoped<IHotelInfoRepository, HotelInfoRepository>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
             var app = builder.Build();
+
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -23,6 +34,8 @@ namespace HotelInfo.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseRouting();
 
             app.UseAuthorization();
 
