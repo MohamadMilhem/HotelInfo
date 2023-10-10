@@ -147,11 +147,47 @@ namespace HotelInfo.API.Controllers
             return NoContent();
         }
 
+
+        [HttpGet("{cityId}/hotels")]
+        public async Task<ActionResult<IEnumerable<HotelWithoutRooms>>> GetHotelsAsync(int cityId)
+        {
+            if (!await _hotelInfoRepository.CityExistsAsync(cityId))
+            {
+                return NotFound();
+            }
+
+            var hotels = await _hotelInfoRepository.GetHotelsAysnc(cityId);
+
+            return Ok(_mapper.Map<IEnumerable<HotelWithoutRooms>>(hotels));
+
+        }
+
+        [HttpPost("{cityId}/hotels")]
+        public async Task<ActionResult<HotelDto>> CreateHotel(int cityId, HotelForCreationDto hotelForCreationDto)
+        {
+            if (!await _hotelInfoRepository.CityExistsAsync(cityId))
+            {
+                return NotFound();
+            }
+
+            var hotelToStore = _mapper.Map<Entites.Hotel>(hotelForCreationDto);
+
+            await _hotelInfoRepository.CreateHotelAsync(cityId, hotelToStore);
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            var hotelToReturn = _mapper.Map<HotelDto>(hotelToStore);
+
+            return CreatedAtRoute("GetHotel",
+                new { Id = hotelToReturn.Id },
+                hotelToReturn);
+
+        }
+
     }
 
-    
 
 
 
-    
+
+
 }

@@ -9,7 +9,7 @@ using System.Text.Json;
 namespace HotelInfo.API.Controllers
 {
     [ApiController]
-    [Route("api/cities/{cityId}/hotels")]
+    [Route("api/hotels")]
     public class HotelsController : ControllerBase
     {
         private readonly IHotelInfoRepository _hotelInfoRepository;
