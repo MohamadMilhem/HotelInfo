@@ -1,6 +1,6 @@
 ﻿namespace HotelInfo.API.Models
 {
-    public class RoomForUpdate
+    public class RoomForUpdateDto
     {
         public string RoomNumber { get; set; } = null!;
     }

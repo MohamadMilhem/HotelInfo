@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HotelInfo.API.Models;
 using HotelInfo.API.Services;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelInfo.API.Controllers
@@ -37,7 +38,7 @@ namespace HotelInfo.API.Controllers
 
 
         [HttpPut("{roomId}")]
-        public async Task<ActionResult> UpdatePointOfInterest(int roomId, RoomForUpdate room)
+        public async Task<ActionResult> UpdatePointOfInterest(int roomId, RoomForUpdateDto room)
         {
             var roomEntity = await _hotelInfoRepository
                 .GetRoomAsync(roomId);
@@ -48,6 +49,35 @@ namespace HotelInfo.API.Controllers
             }
 
             _mapper.Map(room, roomEntity);
+
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
+        [HttpPatch("{roomId}")]
+        public async Task<ActionResult> PartiallyUpdateRoom(int roomId,
+            JsonPatchDocument<RoomForUpdateDto> patchDocument)
+        {
+
+            var roomEntity = await _hotelInfoRepository.GetRoomAsync(roomId);
+
+            if (roomEntity == null)
+            {
+                return NotFound();
+            }
+
+            var roomToUpdate = _mapper.Map<RoomForUpdateDto>(roomEntity);
+
+            patchDocument.ApplyTo(roomToUpdate);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _mapper.Map(roomToUpdate, roomEntity);
 
             await _hotelInfoRepository.SaveChangesAsync();
 

@@ -9,8 +9,8 @@ namespace HotelInfo.API.Profiles
         {
             CreateMap<Entites.Room, RoomDto>();
             CreateMap<RoomDto, Entites.Room>();
-            CreateMap<Entites.Room, RoomForUpdate>();
-            CreateMap<RoomForUpdate, Entites.Room>();
+            CreateMap<Entites.Room, RoomForUpdateDto>();
+            CreateMap<RoomForUpdateDto, Entites.Room>();
         }
     }
 }
