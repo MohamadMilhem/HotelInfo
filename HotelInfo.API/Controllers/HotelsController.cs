@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure;
+using HotelInfo.API.Entites;
 using HotelInfo.API.Models;
 using HotelInfo.API.Services;
 using Microsoft.AspNetCore.JsonPatch;
@@ -107,6 +108,40 @@ namespace HotelInfo.API.Controllers
             return NoContent();
         }
 
+        [HttpGet("{hotelId}/rooms")]
+        public async Task<ActionResult<IEnumerable<RoomDto>>> GetHotelsAsync(int hotelId)
+        {
+            if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
+            {
+                return NotFound();
+            }
+
+            var rooms = await _hotelInfoRepository.GetRoomsAysnc(hotelId);
+
+            return Ok(_mapper.Map<IEnumerable<RoomDto>>(rooms));
+
+        }
+
+        [HttpPost("{hotelId}/rooms")]
+        public async Task<ActionResult<HotelDto>> CreateRoom(int hotelId, RoomForCreationDto roomForCreationDto)
+        {
+            if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
+            {
+                return NotFound();
+            }
+
+            var roomToStore = _mapper.Map<Entites.Room>(roomForCreationDto);
+
+            await _hotelInfoRepository.CreateRoom(hotelId, roomToStore);
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            var roomToReturn = _mapper.Map<RoomDto>(roomToStore);
+
+            return CreatedAtRoute("GetRoom",
+                new { Id = roomToReturn.Id },
+                roomToReturn);
+
+        }
 
     }
 }
