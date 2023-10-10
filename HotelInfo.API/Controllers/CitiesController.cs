@@ -41,6 +41,7 @@ namespace HotelInfo.API.Controllers
 
         [HttpGet("{id}", Name = "GetCity")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetCityAsync(int id, bool includeHotels = false)
         {
             var city = await _hotelInfoRepository.GetCityAsync(id, includeHotels);
@@ -96,6 +97,9 @@ namespace HotelInfo.API.Controllers
         }
 
         [HttpPatch("{cityId}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> PartiallyUpdateCity(int cityId,
             JsonPatchDocument<CityForUpdateDto> patchDocument)
         {
@@ -117,6 +121,26 @@ namespace HotelInfo.API.Controllers
             }
 
             _mapper.Map(cityToUpdate, cityEntity);
+
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("{cityId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeletePointOfInterest(int cityId)
+        {
+            if (!await _hotelInfoRepository.CityExistsAsync(cityId))
+            {
+                return NotFound();
+            }
+
+            var city = await _hotelInfoRepository.GetCityAsync(cityId, false);
+
+
+            _hotelInfoRepository.DeleteCity(city);
 
             await _hotelInfoRepository.SaveChangesAsync();
 
