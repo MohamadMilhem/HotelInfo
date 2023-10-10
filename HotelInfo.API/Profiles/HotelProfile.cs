@@ -13,6 +13,8 @@ namespace HotelInfo.API.Profiles
             CreateMap<HotelWithoutRooms, Entites.Hotel>();
             CreateMap<Entites.Hotel, HotelForCreationDto>();
             CreateMap<HotelForCreationDto, Entites.Hotel>();
+            CreateMap<Entites.Hotel, HotelForUpdateDto>();
+            CreateMap<HotelForUpdateDto, Entites.Hotel>();
         }
     }
 }

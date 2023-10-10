@@ -60,5 +60,25 @@ namespace HotelInfo.API.Controllers
             return Ok(_mapper.Map<HotelWithoutRooms>(hotel));
 
         }
+
+        [HttpPut("{hotelId}")]
+        public async Task<ActionResult> UpdatePointOfInterest(int hotelId, HotelForUpdateDto hotelForUpdateDto)
+        {
+            var hotelEntity = await _hotelInfoRepository
+                .GetHotelAsync(hotelId, false);
+
+            if (hotelEntity == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(hotelForUpdateDto, hotelEntity);
+
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
     }
 }
