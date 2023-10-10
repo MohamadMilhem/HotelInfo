@@ -20,6 +20,8 @@ namespace HotelInfo.API
             builder.Services.AddDbContext<HotelInfoContext>();
             builder.Services.AddScoped<IHotelInfoRepository, HotelInfoRepository>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            builder.Services.AddControllersWithViews()
+                            .AddNewtonsoftJson();
 
 
             var app = builder.Build();
