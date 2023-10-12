@@ -21,7 +21,17 @@ namespace HotelInfo.API.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-
+        /// <summary>
+        /// Retrieve a list of cities by searching for specific criteria.
+        /// </summary>
+        /// <param name="name">The name of the city or a part of it to search for.</param>
+        /// <param name="searchQuery">A string to search for in the city descriptions.</param>
+        /// <param name="pageSize">The number of results to display per page (default is 10).</param>
+        /// <param name="pageNumber">The page number for paginated results (default is 1).</param>
+        /// <returns>
+        /// An <see cref="ActionResult"/> containing a collection of cities that match the specified criteria.
+        /// </returns>
+        /// <response code="200">Returns the matching cities when found.</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<CityWithoutHotels>>> GetCities(
@@ -38,13 +48,22 @@ namespace HotelInfo.API.Controllers
 
             return Ok(results);
         }
-
-        [HttpGet("{id}", Name = "GetCity")]
+        /// <summary>
+        /// Get detailed information about a city by its unique identifier.
+        /// </summary>
+        /// <param name="cityId">The unique identifier of the city to retrieve.</param>
+        /// <param name="includeHotels">Specify whether or not to include information about hotels in the city.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> containing the requested city's information or a not-found response if the city does not exist.
+        /// </returns>
+        /// <response code="200">Returns the requested city when found.</response>
+        /// <response code="404">Indicates that the specified city was not found.</response>
+        [HttpGet("{cityId}", Name = "GetCity")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetCityAsync(int id, bool includeHotels = false)
+        public async Task<IActionResult> GetCityAsync(int cityId, bool includeHotels = false)
         {
-            var city = await _hotelInfoRepository.GetCityAsync(id, includeHotels);
+            var city = await _hotelInfoRepository.GetCityAsync(cityId, includeHotels);
 
             if (city == null)
             {
@@ -59,7 +78,14 @@ namespace HotelInfo.API.Controllers
             return Ok(_mapper.Map<CityWithoutHotels>(city));
 
         }
-
+        /// <summary>
+        /// Create a new city.
+        /// </summary>
+        /// <param name="city">The data for creating the new city.</param>
+        /// <returns>
+        /// An <see cref="ActionResult"/> containing the newly created city or a 201 Created response.
+        /// </returns>
+        /// <response code="201">Returns the newly created city when the operation is successful.</response>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<CityDto>> CreateCity(CityForCreationDto city)
@@ -75,7 +101,16 @@ namespace HotelInfo.API.Controllers
                 new { id = cityToReturn.Id },
                 cityToReturn);
         }
-
+        /// <summary>
+        /// Update an entire city.
+        /// </summary>
+        /// <param name="cityId">The unique identifier of the city to update.</param>
+        /// <param name="cityForUpdateDto">The data for updating the city.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the update operation, which may be a 204 No Content response when successful.
+        /// </returns>
+        /// <response code="204">Indicates a successful update with no content returned.</response>
+        /// <response code="404">Indicates that the specified city was not found.</response>
         [HttpPut("{cityId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -95,7 +130,18 @@ namespace HotelInfo.API.Controllers
             return NoContent();
 
         }
-
+        /// <summary>
+        /// Partially update a city.
+        /// </summary>
+        /// <param name="cityId">The unique identifier of the city to partially update.</param>
+        /// <param name="patchDocument">The JSON patch document containing the changes to apply to the city.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the partial update operation. 
+        /// This may include a 204 No Content response if successful, 400 Bad Request if the request is invalid, or 404 Not Found if the city does not exist.
+        /// </returns>
+        /// <response code="204">Indicates a successful partial update with no content returned.</response>
+        /// <response code="400">Indicates a bad request due to an invalid patch document or other errors.</response>
+        /// <response code="404">Indicates that the specified city was not found.</response>
         [HttpPatch("{cityId}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -126,11 +172,19 @@ namespace HotelInfo.API.Controllers
 
             return NoContent();
         }
-
+        /// <summary>
+        /// Delete a city and associated data.
+        /// </summary>
+        /// <param name="cityId">The unique identifier of the city to be deleted.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the deletion operation, which may include a 204 No Content response when successful, or a 404 Not Found response if the city does not exist.
+        /// </returns>
+        /// <response code="204">Indicates a successful deletion with no content returned.</response>
+        /// <response code="404">Indicates that the specified city was not found.</response>
         [HttpDelete("{cityId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> DeletePointOfInterest(int cityId)
+        public async Task<ActionResult> DeleteCity(int cityId)
         {
             if (!await _hotelInfoRepository.CityExistsAsync(cityId))
             {
@@ -146,9 +200,18 @@ namespace HotelInfo.API.Controllers
 
             return NoContent();
         }
-
-
+        /// <summary>
+        /// Retrieve a list of hotels in a specific city.
+        /// </summary>
+        /// <param name="cityId">The unique identifier of the city for which you want to retrieve hotels.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> containing a collection of hotels in the specified city.
+        /// </returns>
+        /// <response code="200">Indicates a successful retrieval of hotels in the specified city.</response>
+        /// <response code="404">Indicates that the specified city was not found.</response>
         [HttpGet("{cityId}/hotels")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<HotelWithoutRooms>>> GetHotelsAsync(int cityId)
         {
             if (!await _hotelInfoRepository.CityExistsAsync(cityId))
@@ -161,8 +224,16 @@ namespace HotelInfo.API.Controllers
             return Ok(_mapper.Map<IEnumerable<HotelWithoutRooms>>(hotels));
 
         }
-
+        /// <summary>
+        /// Create a new hotel in a specific city.
+        /// </summary>
+        /// <param name="cityId">The unique identifier of the city where the hotel will be created.</param>
+        /// <param name="hotelForCreationDto">The data for creating the hotel.</param>
+        /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
+        /// </returns>
         [HttpPost("{cityId}/hotels")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<HotelDto>> CreateHotel(int cityId, HotelForCreationDto hotelForCreationDto)
         {
             if (!await _hotelInfoRepository.CityExistsAsync(cityId))
@@ -182,9 +253,20 @@ namespace HotelInfo.API.Controllers
                 hotelToReturn);
 
         }
-
+        /// <summary>
+        /// Delete a hotel within a specific city.
+        /// </summary>
+        /// <param name="cityId">The unique identifier of the city that contains the hotel.</param>
+        /// <param name="hotelId">The unique identifier of the hotel to be deleted.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the deletion operation. This may include a 204 No Content response when successful, or a 404 Not Found response if the city or hotel does not exist.
+        /// </returns>
+        /// <response code="204">Indicates a successful deletion with no content returned.</response>
+        /// <response code="404">Indicates that the specified city or hotel was not found.</response>
         [HttpDelete("{cityId}/hotels/{hotelId}")]
-        public async Task<ActionResult> DeletePointOfInterest(int cityId, int hotelId)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteHotel(int cityId, int hotelId)
         {
             if (!await _hotelInfoRepository.CityExistsAsync(cityId))
             {

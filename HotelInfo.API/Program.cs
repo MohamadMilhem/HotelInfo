@@ -1,5 +1,7 @@
 using HotelInfo.API.DbContexts;
 using HotelInfo.API.Services;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace HotelInfo.API
 {
@@ -14,7 +16,13 @@ namespace HotelInfo.API
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(setup =>
+            {
+                var xmlCommentsFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFileName);
+
+                setup.IncludeXmlComments(xmlCommentsFullPath);
+            });
 
 
             builder.Services.AddDbContext<HotelInfoContext>();

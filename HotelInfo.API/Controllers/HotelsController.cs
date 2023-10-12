@@ -23,7 +23,19 @@ namespace HotelInfo.API.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-
+        /// <summary>
+        /// Retrieve a list of hotels based on search criteria.
+        /// </summary>
+        /// <param name="name">The name of the hotels to search for, or a part of it.</param>
+        /// <param name="searchQuery">A string to search for in hotel descriptions.</param>
+        /// <param name="pageSize">The number of results to display per page (default is 10).</param>
+        /// <param name="pageNumber">The page number for paginated results (default is 1).</param>
+        /// <returns>
+        /// An <see cref="ActionResult"/> containing a collection of hotels that match the specified search criteria.
+        /// </returns>
+        /// <response code="200">Indicates a successful retrieval of hotels based on the search criteria.</response>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<HotelWithoutRooms>>> GetHotels(
@@ -41,6 +53,16 @@ namespace HotelInfo.API.Controllers
             return Ok(results);
         }
 
+        /// <summary>
+        /// Retrieve information about a hotel by its unique identifier.
+        /// </summary>
+        /// <param name="id">The unique identifier of the hotel to retrieve.</param>
+        /// <param name="includeRooms">Indicates whether or not to include room details for the hotel.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> containing information about the specified hotel. This may include a 200 OK response when successful, or a 404 Not Found response if the hotel is not found.
+        /// </returns>
+        /// <response code="200">Indicates a successful retrieval of hotel information.</response>
+        /// <response code="404">Indicates that the specified hotel was not found.</response>
         [HttpGet("{id}", Name = "GetHotel")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -62,8 +84,20 @@ namespace HotelInfo.API.Controllers
 
         }
 
+        /// <summary>
+        /// Update information about a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel to update.</param>
+        /// <param name="hotelForUpdateDto">The data for updating the hotel.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the update operation. This may include a 204 No Content response when successful, or a 404 Not Found response if the hotel is not found.
+        /// </returns>
+        /// <response code="204">Indicates a successful update with no content returned.</response>
+        /// <response code="404">Indicates that the specified hotel was not found.</response>
         [HttpPut("{hotelId}")]
-        public async Task<ActionResult> UpdatePointOfInterest(int hotelId, HotelForUpdateDto hotelForUpdateDto)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> UpdateHotel(int hotelId, HotelForUpdateDto hotelForUpdateDto)
         {
             var hotelEntity = await _hotelInfoRepository
                 .GetHotelAsync(hotelId, false);
@@ -80,7 +114,21 @@ namespace HotelInfo.API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Partially update information about a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel to partially update.</param>
+        /// <param name="patchDocument">A JSON patch document containing the changes to apply to the hotel.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the partial update operation. This may include a 204 No Content response when successful, a 400 Bad Request response if the request is invalid, or a 404 Not Found response if the hotel is not found.
+        /// </returns>
+        /// <response code="204">Indicates a successful partial update with no content returned.</response>
+        /// <response code="400">Indicates a bad request due to an invalid patch document or other errors.</response>
+        /// <response code="404">Indicates that the specified hotel was not found.</response>
         [HttpPatch("{hotelId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> PartiallyUpdateHotel(int hotelId,
             JsonPatchDocument<HotelForUpdateDto> patchDocument)
         {
@@ -108,7 +156,18 @@ namespace HotelInfo.API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Retrieve a list of rooms within a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel for which you want to retrieve rooms.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> containing a collection of rooms in the specified hotel. This may include a 200 OK response when successful, or a 404 Not Found response if the hotel is not found.
+        /// </returns>
+        /// <response code="200">Indicates a successful retrieval of rooms in the specified hotel.</response>
+        /// <response code="404">Indicates that the specified hotel was not found.</response>
         [HttpGet("{hotelId}/rooms")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<RoomDto>>> GetHotelsAsync(int hotelId)
         {
             if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
@@ -122,7 +181,19 @@ namespace HotelInfo.API.Controllers
 
         }
 
+        /// <summary>
+        /// Create a new room within a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel where the room will be created.</param>
+        /// <param name="roomForCreationDto">The data for creating the room.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> representing the result of the operation. This may include a 201 Created response when successful, or a 404 Not Found response if the hotel is not found.
+        /// </returns>
+        /// <response code="201">Indicates a successful creation of a room within the hotel.</response>
+        /// <response code="404">Indicates that the specified hotel was not found.</response>
         [HttpPost("{hotelId}/rooms")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<HotelDto>> CreateRoom(int hotelId, RoomForCreationDto roomForCreationDto)
         {
             if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
@@ -143,8 +214,20 @@ namespace HotelInfo.API.Controllers
 
         }
 
+        /// <summary>
+        /// Delete a room within a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel that contains the room.</param>
+        /// <param name="roomId">The unique identifier of the room to be deleted.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the deletion operation. This may include a 204 No Content response when successful, or a 404 Not Found response if the hotel or room is not found.
+        /// </returns>
+        /// <response code="204">Indicates a successful deletion with no content returned.</response>
+        /// <response code="404">Indicates that the specified hotel or room was not found.</response>
         [HttpDelete("{hotelId}/rooms/{roomId}")]
-        public async Task<ActionResult> DeletePointOfInterest(int hotelId, int roomId)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteRoom(int hotelId, int roomId)
         {
             if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
             {
