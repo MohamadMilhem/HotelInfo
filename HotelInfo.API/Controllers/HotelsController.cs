@@ -252,5 +252,96 @@ namespace HotelInfo.API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Retrieve a list of photos of a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel for which you want to retrieve photos.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> containing a collection of photos in the specified hotel.
+        /// </returns>
+        /// <response code="200">Indicates a successful retrieval of photos of the specified hotel.</response>
+        /// <response code="404">Indicates that the specified hotel was not found.</response>
+        [HttpGet("{hotelId}/photos")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<PhotoDto>>> GetPhotosAsync(int hotelId)
+        {
+            if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
+            {
+                return NotFound();
+            }
+
+            var photos = await _hotelInfoRepository.GetPhotosHotelAysnc(hotelId);
+
+            return Ok(_mapper.Map<IEnumerable<PhotoDto>>(photos));
+
+        }
+        /// <summary>
+        /// Add a new photo to a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel where the photo will be added.</param>
+        /// <param name="photoForCreationDto">The data for creating the photo.</param>
+        /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
+        /// </returns>
+        [HttpPost("{hotelId}/photos")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<PhotoDto>> AddPhoto(int hotelId,  PhotoForCreationDto photoForCreationDto)
+        {
+            if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
+            {
+                return NotFound();
+            }
+
+            var photoToStore = _mapper.Map<Entites.Photo>(photoForCreationDto);
+
+            await _hotelInfoRepository.AddPhotoToHotel(hotelId, photoToStore);
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            var photoToReturn = _mapper.Map<PhotoDto>(photoToStore);
+
+            return CreatedAtRoute("GetPhoto",
+                new { Id = photoToReturn.Id },
+                photoToReturn);
+
+        }
+        /// <summary>
+        /// Delete a photo for a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel that the photo belongs to.</param>
+        /// <param name="photoId">The unique identifier of the photo to be deleted.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the deletion operation. This may include a 204 No Content response when successful, or a 404 Not Found response if the hotel or photo does not exist.
+        /// </returns>
+        /// <response code="204">Indicates a successful deletion with no content returned.</response>
+        /// <response code="404">Indicates that the specified hotel or photo was not found.</response>
+        [HttpDelete("{hotelId}/photos/{photoId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeletePhoto(int hotelId, int photoId)
+        {
+            if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
+            {
+                return NotFound();
+            }
+
+            var hotel = await _hotelInfoRepository.GetHotelWithPhotosAsync(hotelId);
+
+            var photoToDelete = hotel.Photos
+                .Where(photo => photo.Id == photoId)
+                .SingleOrDefault();
+
+            if (photoToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _hotelInfoRepository.DeletePhoto(photoToDelete);
+
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
     }
 }
