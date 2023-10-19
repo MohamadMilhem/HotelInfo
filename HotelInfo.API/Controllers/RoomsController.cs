@@ -75,8 +75,6 @@ namespace HotelInfo.API.Controllers
 
             return NoContent();
         }
-
-
         /// <summary>
         /// Partially update information about a specific room using a JSON patch document.
         /// </summary>
@@ -113,6 +111,96 @@ namespace HotelInfo.API.Controllers
             }
 
             _mapper.Map(roomToUpdate, roomEntity);
+
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+        /// <summary>
+        /// Retrieve a list of photos of a specific room.
+        /// </summary>
+        /// <param name="roomId">The unique identifier of the room for which you want to retrieve photos.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> containing a collection of photos in the specified room.
+        /// </returns>
+        /// <response code="200">Indicates a successful retrieval of photos of the specified room.</response>
+        /// <response code="404">Indicates that the specified room was not found.</response>
+        [HttpGet("{roomId}/photos")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<PhotoDto>>> GetPhotosAsync(int roomId)
+        {
+            if (!await _hotelInfoRepository.RoomExistsAsync(roomId))
+            {
+                return NotFound();
+            }
+
+            var photos = await _hotelInfoRepository.GetPhotosRoomAysnc(roomId);
+
+            return Ok(_mapper.Map<IEnumerable<PhotoDto>>(photos));
+
+        }
+        /// <summary>
+        /// Add a new photo to a specific room.
+        /// </summary>
+        /// <param name="roomId">The unique identifier of the room where the photo will be added.</param>
+        /// <param name="photoForCreationDto">The data for creating the photo.</param>
+        /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
+        /// </returns>
+        [HttpPost("{roomId}/photos")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<PhotoDto>> AddPhoto(int roomId, PhotoForCreationDto photoForCreationDto)
+        {
+            if (!await _hotelInfoRepository.RoomExistsAsync(roomId))
+            {
+                return NotFound();
+            }
+
+            var photoToStore = _mapper.Map<Entites.Photo>(photoForCreationDto);
+
+            await _hotelInfoRepository.AddPhotoToRoom(roomId, photoToStore);
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            var photoToReturn = _mapper.Map<PhotoDto>(photoToStore);
+
+            return CreatedAtRoute("GetPhoto",
+                new { Id = photoToReturn.Id },
+                photoToReturn);
+
+        }
+        /// <summary>
+        /// Delete a photo for a specific room.
+        /// </summary>
+        /// <param name="roomId">The unique identifier of the room that the photo belongs to.</param>
+        /// <param name="photoId">The unique identifier of the photo to be deleted.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the deletion operation. This may include a 204 No Content response when successful, or a 404 Not Found response if the city or photo does not exist.
+        /// </returns>
+        /// <response code="204">Indicates a successful deletion with no content returned.</response>
+        /// <response code="404">Indicates that the specified room or photo was not found.</response>
+        [HttpDelete("{roomId}/photos/{photoId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeletePhoto(int roomId, int photoId)
+        {
+            if (!await _hotelInfoRepository.RoomExistsAsync(roomId))
+            {
+                return NotFound();
+            }
+
+            var room = await _hotelInfoRepository.GetRoomWithPhotosAsync(roomId);
+
+            var photoToDelete = room.Photos
+                .Where(photo => photo.Id == photoId)
+                .SingleOrDefault();
+
+            if (photoToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _hotelInfoRepository.DeletePhoto(photoToDelete);
 
             await _hotelInfoRepository.SaveChangesAsync();
 
