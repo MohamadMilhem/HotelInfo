@@ -10,6 +10,7 @@ namespace HotelInfo.API.DbContexts
         public DbSet<City> Cities { get; set; }
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
 
         public HotelInfoContext(IConfiguration configuration)

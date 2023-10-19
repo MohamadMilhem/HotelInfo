@@ -16,6 +16,7 @@ namespace HotelInfo.API.Entites
         [MaxLength(500)]
         public string Description { get; set; } = null!;
         public ICollection<Hotel> Hotels { get; set; } = new List<Hotel>(); 
+        public ICollection<Photo> Photos { get; set; } = new List<Photo>();
         
         public City(string name) 
         {

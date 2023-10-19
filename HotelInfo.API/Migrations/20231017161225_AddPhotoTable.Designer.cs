@@ -3,6 +3,7 @@ using HotelInfo.API.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelInfo.API.Migrations
 {
     [DbContext(typeof(HotelInfoContext))]
-    partial class HotelInfoContextModelSnapshot : ModelSnapshot
+    [Migration("20231017161225_AddPhotoTable")]
+    partial class AddPhotoTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities", (string)null);
+                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("HotelInfo.API.Entites.Hotel", b =>
@@ -81,7 +84,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Hotels", (string)null);
+                    b.ToTable("Hotels");
                 });
 
             modelBuilder.Entity("HotelInfo.API.Entites.Photo", b =>
@@ -114,7 +117,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Photos", (string)null);
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("HotelInfo.API.Entites.Room", b =>
@@ -137,7 +140,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Rooms", (string)null);
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("HotelInfo.API.Entites.Hotel", b =>

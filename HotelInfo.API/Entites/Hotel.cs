@@ -23,6 +23,7 @@ namespace HotelInfo.API.Entites
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
         public ICollection<Room> Rooms { get; set; } = new List<Room>();
+        public ICollection<Photo> Photos { get; set; } = new List<Photo>();
 
         public Hotel(string name) 
         {

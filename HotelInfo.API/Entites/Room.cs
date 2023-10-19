@@ -14,6 +14,7 @@ namespace HotelInfo.API.Entites
         public Hotel? Hotel { get; set; }
         [ForeignKey(nameof(HotelId))]
         public int HotelId { get; set; }
+        public ICollection<Photo> Photos { get; set; } = new List<Photo>();
 
         public Room( string roomNumber)
         {
