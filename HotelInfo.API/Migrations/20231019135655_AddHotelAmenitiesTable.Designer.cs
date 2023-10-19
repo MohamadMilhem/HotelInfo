@@ -4,6 +4,7 @@ using HotelInfo.API.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelInfo.API.Migrations
 {
     [DbContext(typeof(HotelInfoContext))]
-    partial class HotelInfoContextModelSnapshot : ModelSnapshot
+    [Migration("20231019135655_AddHotelAmenitiesTable")]
+    partial class AddHotelAmenitiesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,7 +118,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HotelAmenities");
+                    b.ToTable("HotelAmenity");
                 });
 
             modelBuilder.Entity("HotelInfo.API.Entites.Photo", b =>
