@@ -303,7 +303,7 @@ namespace HotelInfo.API.Controllers
         [HttpGet("{cityId}/photos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<Photo>>> GetPhotosAsync(int cityId)
+        public async Task<ActionResult<IEnumerable<PhotoDto>>> GetPhotosAsync(int cityId)
         {
             if (!await _hotelInfoRepository.CityExistsAsync(cityId))
             {
@@ -312,7 +312,7 @@ namespace HotelInfo.API.Controllers
 
             var photos = await _hotelInfoRepository.GetPhotosCityAysnc(cityId);
 
-            return Ok(_mapper.Map<PhotoDto>(photos));
+            return Ok(_mapper.Map<IEnumerable<PhotoDto>>(photos));
 
         }
         /// <summary>
