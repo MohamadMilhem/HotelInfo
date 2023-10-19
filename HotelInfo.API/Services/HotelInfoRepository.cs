@@ -95,7 +95,22 @@ namespace HotelInfo.API.Services
             return query;
         }
 
+        public async Task<IEnumerable<Photo>> GetPhotosCityAysnc(int cityId)
+        {
+            var query = await _hotelInfoContext.Photos.Where(photo => photo.CityId == cityId).ToListAsync();
+            return query;
+        }
 
+        public async Task<IEnumerable<Photo>> GetPhotosHotelAysnc(int hotelId)
+        {
+            var query = await _hotelInfoContext.Photos.Where(photo => photo.HotelId == hotelId).ToListAsync();
+            return query;
+        }
+        public async Task<IEnumerable<Photo>> GetPhotosRoomAysnc(int roomId)
+        {
+            var query = await _hotelInfoContext.Photos.Where(photo => photo.RoomId == roomId).ToListAsync();
+            return query;
+        }
         public async Task<City?> GetCityAsync(int cityId, bool includeHotels)
         {
             if (includeHotels)
@@ -110,6 +125,13 @@ namespace HotelInfo.API.Services
                 .SingleOrDefaultAsync();
         }
 
+        public async Task<City?> GetCityWithPhotosAsync(int cityId)
+        {
+            return await _hotelInfoContext.Cities
+                .Include(c => c.Photos)
+                .Where(c => c.Id == cityId)
+                .SingleOrDefaultAsync();
+        }
         public async Task<Hotel?> GetHotelAsync(int hotelId, bool includeRooms)
         {
             if (includeRooms)
@@ -122,10 +144,27 @@ namespace HotelInfo.API.Services
             return await _hotelInfoContext.Hotels
                 .SingleOrDefaultAsync(hotel => hotel.Id == hotelId);
         }
-
+        public async Task<Hotel?> GetHotelWithPhotosAsync(int hotelId)
+        {
+            return await _hotelInfoContext.Hotels
+                .Include(h => h.Photos)
+                .Where(h => h.Id == hotelId)
+                .SingleOrDefaultAsync();
+        }
         public async Task<Room?> GetRoomAsync(int roomId)
         {
             return await _hotelInfoContext.Rooms.SingleOrDefaultAsync(room => room.Id == roomId);
+        }
+        public async Task<Room?> GetRoomWithPhotosAsync(int roomId)
+        {
+            return await _hotelInfoContext.Rooms
+                .Include(r => r.Photos)
+                .Where(r => r.Id == roomId)
+                .SingleOrDefaultAsync();
+        }
+        public async Task<Photo?> GetPhotoAsync(int photoId)
+        {
+            return await _hotelInfoContext.Photos.SingleOrDefaultAsync(photo => photo.Id == photoId);
         }
 
         public async Task CreateCityAsync(City city)
@@ -150,6 +189,31 @@ namespace HotelInfo.API.Services
                 hotel.Rooms.Add(room);
             }
         }
+        public async Task AddPhotoToCity(int cityId, Photo photo) 
+        {
+            var city = await GetCityAsync(cityId, false);
+            if (city != null)
+            {
+                city.Photos.Add(photo);
+            }
+        }
+        public async Task AddPhotoToHotel(int hotelId, Photo photo)
+        {
+            var hotel = await GetHotelAsync(hotelId, false);
+            if (hotel != null)
+            {
+                hotel.Photos.Add(photo);
+            }
+        }
+
+        public async Task AddPhotoToRoom(int roomId, Photo photo)
+        {
+            var room = await GetRoomAsync(roomId);
+            if (room != null)
+            {
+                room.Photos.Add(photo);
+            }
+        }
 
         public async Task<bool> CityExistsAsync(int cityId)
         {
@@ -165,6 +229,10 @@ namespace HotelInfo.API.Services
         {
             return await _hotelInfoContext.Rooms.AnyAsync(room => room.Id == roomId);
         }
+        public async Task<bool> PhotoExistsAsync(int photoId)
+        {
+            return await _hotelInfoContext.Photos.AnyAsync(photo => photo.Id == photoId);
+        }
 
         public void DeleteCity(City city)
         {
@@ -179,6 +247,10 @@ namespace HotelInfo.API.Services
         public void DeleteRoom(Room room)
         {
             _hotelInfoContext.Rooms.Remove(room);
+        }
+        public void DeletePhoto(Photo photo)
+        {
+            _hotelInfoContext.Photos.Remove(photo);
         }
 
         public async Task<bool> SaveChangesAsync()

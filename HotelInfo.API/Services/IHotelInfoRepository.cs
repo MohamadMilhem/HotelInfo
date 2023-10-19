@@ -22,6 +22,18 @@ namespace HotelInfo.API.Services
         Task<IEnumerable<Room>> GetRoomsAysnc(int hotelId);
         Task<bool> HotelExistsAsync(int hotelId);
         Task<bool> RoomExistsAsync(int roomId);
+        Task<IEnumerable<Photo>> GetPhotosCityAysnc(int cityId);
+        Task<IEnumerable<Photo>> GetPhotosHotelAysnc(int hotelId);
+        Task<IEnumerable<Photo>> GetPhotosRoomAysnc(int roomId);
+        Task<City?> GetCityWithPhotosAsync(int cityId);
+        Task<Hotel?> GetHotelWithPhotosAsync(int hotelId);
+        Task<Room?> GetRoomWithPhotosAsync(int roomId);
+        Task<Photo?> GetPhotoAsync(int photoId);
+        Task<IEnumerable<Photo>> GetPhotos();
+        Task AddPhotoToCity(int cityId, Photo photo);
+        Task AddPhotoToHotel(int hotelId, Photo photo);
+        Task AddPhotoToRoom(int roomId, Photo photo);
+        public void DeletePhoto(Photo photo);
         Task<bool> SaveChangesAsync();
     }
 }
