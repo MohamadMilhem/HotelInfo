@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using HotelInfo.API.Entites;
 using HotelInfo.API.Models;
 using HotelInfo.API.Services;
 using Microsoft.AspNetCore.JsonPatch;
@@ -290,7 +291,96 @@ namespace HotelInfo.API.Controllers
 
             return NoContent();
         }
+        /// <summary>
+        /// Retrieve a list of photos of a specific city.
+        /// </summary>
+        /// <param name="cityId">The unique identifier of the city for which you want to retrieve photos.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> containing a collection of photos in the specified city.
+        /// </returns>
+        /// <response code="200">Indicates a successful retrieval of photos of the specified city.</response>
+        /// <response code="404">Indicates that the specified city was not found.</response>
+        [HttpGet("{cityId}/photos")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<Photo>>> GetPhotosAsync(int cityId)
+        {
+            if (!await _hotelInfoRepository.CityExistsAsync(cityId))
+            {
+                return NotFound();
+            }
 
+            var photos = await _hotelInfoRepository.GetPhotosCityAysnc(cityId);
+
+            return Ok(_mapper.Map<PhotoDto>(photos));
+
+        }
+        /// <summary>
+        /// Add a new photo to a specific city.
+        /// </summary>
+        /// <param name="cityId">The unique identifier of the city where the photo will be added.</param>
+        /// <param name="photoForCreationDto">The data for creating the photo.</param>
+        /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
+        /// </returns>
+        [HttpPost("{cityId}/photos")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<PhotoDto>> AddPhoto(int cityId,  PhotoForCreationDto photoForCreationDto)
+        {
+            if (!await _hotelInfoRepository.CityExistsAsync(cityId))
+            {
+                return NotFound();
+            }
+
+            var photoToStore = _mapper.Map<Entites.Photo>(photoForCreationDto);
+
+            await _hotelInfoRepository.AddPhotoToCity(cityId, photoToStore);
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            var photoToReturn = _mapper.Map<PhotoDto>(photoToStore);
+
+            return CreatedAtRoute("GetPhoto",
+                new { Id = photoToReturn.Id },
+                photoToReturn);
+
+        }
+        /// <summary>
+        /// Delete a photo for a specific city.
+        /// </summary>
+        /// <param name="cityId">The unique identifier of the city that the photo belongs to.</param>
+        /// <param name="photoId">The unique identifier of the photo to be deleted.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the deletion operation. This may include a 204 No Content response when successful, or a 404 Not Found response if the city or photo does not exist.
+        /// </returns>
+        /// <response code="204">Indicates a successful deletion with no content returned.</response>
+        /// <response code="404">Indicates that the specified city or photo was not found.</response>
+        [HttpDelete("{cityId}/photos/{photoId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeletePhoto(int cityId, int photoId)
+        {
+            if (!await _hotelInfoRepository.CityExistsAsync(cityId))
+            {
+                return NotFound();
+            }
+
+            var city = await _hotelInfoRepository.GetCityWithPhotosAsync(cityId);
+
+            var photoToDelete = city.Photos
+                .Where(photo => photo.Id == photoId)
+                .SingleOrDefault();
+
+            if (photoToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _hotelInfoRepository.DeletePhoto(photoToDelete);
+
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 
 
