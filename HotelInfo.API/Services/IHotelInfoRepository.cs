@@ -29,7 +29,6 @@ namespace HotelInfo.API.Services
         Task<Hotel?> GetHotelWithPhotosAsync(int hotelId);
         Task<Room?> GetRoomWithPhotosAsync(int roomId);
         Task<Photo?> GetPhotoAsync(int photoId);
-        Task<IEnumerable<Photo>> GetPhotos();
         Task AddPhotoToCity(int cityId, Photo photo);
         Task AddPhotoToHotel(int hotelId, Photo photo);
         Task AddPhotoToRoom(int roomId, Photo photo);
