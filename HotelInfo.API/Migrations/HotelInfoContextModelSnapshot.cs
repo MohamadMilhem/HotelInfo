@@ -34,7 +34,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasIndex("hotelAmenitiesId");
 
-                    b.ToTable("HotelHotelAmenity");
+                    b.ToTable("HotelHotelAmenity", (string)null);
                 });
 
             modelBuilder.Entity("HotelInfo.API.Entites.City", b =>
@@ -57,7 +57,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("HotelInfo.API.Entites.Hotel", b =>
@@ -97,7 +97,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("Hotels");
+                    b.ToTable("Hotels", (string)null);
                 });
 
             modelBuilder.Entity("HotelInfo.API.Entites.HotelAmenity", b =>
@@ -115,7 +115,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HotelAmenities");
+                    b.ToTable("HotelAmenities", (string)null);
                 });
 
             modelBuilder.Entity("HotelInfo.API.Entites.Photo", b =>
@@ -148,7 +148,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photos", (string)null);
                 });
 
             modelBuilder.Entity("HotelInfo.API.Entites.Room", b =>
@@ -171,7 +171,7 @@ namespace HotelInfo.API.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("HotelHotelAmenity", b =>
