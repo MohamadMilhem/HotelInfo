@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure;
 using HotelInfo.API.Entites;
 using HotelInfo.API.Models;
 using HotelInfo.API.Services;
@@ -34,8 +33,6 @@ namespace HotelInfo.API.Controllers
         /// An <see cref="ActionResult"/> containing a collection of hotels that match the specified search criteria.
         /// </returns>
         /// <response code="200">Indicates a successful retrieval of hotels based on the search criteria.</response>
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<HotelWithoutRooms>>> GetHotels(
@@ -168,7 +165,7 @@ namespace HotelInfo.API.Controllers
         [HttpGet("{hotelId}/rooms")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<RoomDto>>> GetHotelsAsync(int hotelId)
+        public async Task<ActionResult<IEnumerable<RoomDto>>> GetRoomsAsync(int hotelId)
         {
             if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
             {
@@ -342,6 +339,95 @@ namespace HotelInfo.API.Controllers
 
             return NoContent();
         }
+        /// <summary>
+        /// Retrieve a list of amenities within a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel for which you want to retrieve amenities.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> containing a collection of amenities in the specified hotel. This may include a 200 OK response when successful, or a 404 Not Found response if the hotel is not found.
+        /// </returns>
+        /// <response code="200">Indicates a successful retrieval of amenities in the specified hotel.</response>
+        /// <response code="404">Indicates that the specified hotel was not found.</response>
+        [HttpGet("{hotelId}/amenities")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<HotelAmenity>>> GetAmenitiesAsync(int hotelId)
+        {
+            if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
+            {
+                return NotFound();
+            }
 
+            var amenities = await _hotelInfoRepository.GetHotelAmenitiesAsync(hotelId);
+
+            return Ok(amenities);
+
+        }
+        /// <summary>
+        /// Add a new hotel amenity to a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel where the hotel amenity will be added.</param>
+        /// <param name="hotelAmenityForCreationDto">The data for creating the hotel amenity.</param>
+        /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
+        /// </returns>
+        [HttpPost("{hotelId}/amenities")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<HotelAmenityDto>> AddHotelAmenity(int hotelId,  HotelAmenityForCreationDto hotelamenityForCreationDto)
+        {
+            if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
+            {
+                return NotFound();
+            }
+
+            var hotelAmenityToStore = _mapper.Map<Entites.HotelAmenity>(hotelamenityForCreationDto);
+
+            await _hotelInfoRepository.AddHotelAmenity(hotelId, hotelAmenityToStore);
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            var hotelAmenityToReturn = _mapper.Map<HotelAmenityDto>(hotelAmenityToStore);
+
+            return CreatedAtRoute("GetHotelAmenity",
+                new { Id = hotelAmenityToReturn.Id },
+                hotelAmenityToReturn);
+
+        }
+        /// <summary>
+        /// Delete a hotel amenity from a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel that the hotel amenity belongs to.</param>
+        /// <param name="hotelAmenityId">The unique identifier of the hotel amenity to be deleted.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the deletion operation. This may include a 204 No Content response when successful, or a 404 Not Found response if the hotel or hotel amenity does not exist.
+        /// </returns>
+        /// <response code="204">Indicates a successful deletion with no content returned.</response>
+        /// <response code="404">Indicates that the specified hotel or hotel amenity was not found.</response>
+        [HttpDelete("{hotelId}/amenities/{hotelAmenityId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteHotelAmenity(int hotelId, int hotelAmenityId)
+        {
+            if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
+            {
+                return NotFound();
+            }
+
+            var hotel = await _hotelInfoRepository.GetHotelWithHotelAmenitiesAsync(hotelId);
+
+            var hotelAmenityToDelete = hotel.hotelAmenities
+                .Where(hotelAmenity => hotelAmenity.Id == hotelAmenityId)
+                .SingleOrDefault();
+
+            if (hotelAmenityToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _hotelInfoRepository.DeleteHotelAmenity(hotelId, hotelAmenityToDelete);
+
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
