@@ -206,5 +206,95 @@ namespace HotelInfo.API.Controllers
 
             return NoContent();
         }
+                /// <summary>
+        /// Retrieve a list of amenities within a specific room.
+        /// </summary>
+        /// <param name="roomId">The unique identifier of the room for which you want to retrieve amenities.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> containing a collection of amenities in the specified room. This may include a 200 OK response when successful, or a 404 Not Found response if the room is not found.
+        /// </returns>
+        /// <response code="200">Indicates a successful retrieval of amenities in the specified room.</response>
+        /// <response code="404">Indicates that the specified room was not found.</response>
+        [HttpGet("{roomId}/amenities")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<RoomAmenityDto>>> GetRoomAmenitiesAsync(int roomId)
+        {
+            if (!await _hotelInfoRepository.RoomExistsAsync(roomId))
+            {
+                return NotFound();
+            }
+
+            var amenities = await _hotelInfoRepository.GetRoomAmenitiesAsync(roomId);
+
+            return Ok(_mapper.Map<IEnumerable<RoomAmenityDto>>(amenities));
+
+        }
+        /// <summary>
+        /// Add a new room amenity to a specific room.
+        /// </summary>
+        /// <param name="roomId">The unique identifier of the room where the room amenity will be added.</param>
+        /// <param name="roomAmenityForCreationDto">The data for creating the room amenity.</param>
+        /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
+        /// </returns>
+        [HttpPost("{roomId}/amenities")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        public async Task<ActionResult<RoomAmenityDto>> AddRoomAmenity(int roomId,  RoomAmenityForCreationDto roomAmenityForCreationDto)
+        {
+            if (!await _hotelInfoRepository.RoomExistsAsync(roomId))
+            {
+                return NotFound();
+            }
+
+            var roomAmenityToStore = _mapper.Map<Entites.RoomAmenity>(roomAmenityForCreationDto);
+
+            await _hotelInfoRepository.AddRoomAmenity(roomId, roomAmenityToStore);
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            var roomAmenityToReturn = _mapper.Map<RoomAmenityDto>(roomAmenityToStore);
+
+            return CreatedAtRoute("GetRoomAmenity",
+                new { Id = roomAmenityToReturn.Id },
+                roomAmenityToReturn);
+
+        }
+        /// <summary>
+        /// Delete a room amenity from a specific room.
+        /// </summary>
+        /// <param name="roomId">The unique identifier of the room that the room amenity belongs to.</param>
+        /// <param name="roomAmenityId">The unique identifier of the room amenity to be deleted.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> indicating the result of the deletion operation. This may include a 204 No Content response when successful, or a 404 Not Found response if the room or room amenity does not exist.
+        /// </returns>
+        /// <response code="204">Indicates a successful deletion with no content returned.</response>
+        /// <response code="404">Indicates that the specified room or room amenity was not found.</response>
+        [HttpDelete("{roomId}/amenities/{roomAmenityId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteRoomAmenity(int roomId, int roomAmenityId)
+        {
+            if (!await _hotelInfoRepository.RoomExistsAsync(roomId))
+            {
+                return NotFound();
+            }
+
+            var room = await _hotelInfoRepository.GetRoomWithRoomAmenitiesAsync(roomId);
+
+            var roomAmenityToDelete = room.RoomAmenities
+                .Where(roomAmenity => roomAmenity.Id == roomAmenityId)
+                .SingleOrDefault();
+
+            if (roomAmenityToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _hotelInfoRepository.DeleteRoomAmenity(roomId, roomAmenityToDelete);
+
+            await _hotelInfoRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
