@@ -12,6 +12,7 @@ namespace HotelInfo.API.Services
         void DeleteCity(City city);
         void DeleteHotel(Hotel hotel);
         void DeleteRoom(Room room);
+        void DeleteHotelAmenity(int hotelId, HotelAmenity hotelAmenity);
         Task<IEnumerable<City>> GetCitiesAsync();
         Task<(IEnumerable<City>, PaginationMetaData)> GetCitiesAsync(string? name, string? searchQuery, int pageSize, int pageNumber);
         Task<City?> GetCityAsync(int cityId, bool includeHotels);
@@ -28,10 +29,16 @@ namespace HotelInfo.API.Services
         Task<City?> GetCityWithPhotosAsync(int cityId);
         Task<Hotel?> GetHotelWithPhotosAsync(int hotelId);
         Task<Room?> GetRoomWithPhotosAsync(int roomId);
+        Task<Hotel?> GetHotelWithHotelAmenitiesAsync(int hotelId);
         Task<Photo?> GetPhotoAsync(int photoId);
+        Task<HotelAmenity?> GetHotelAmenityAsync(int hotelAmentiyId);
         Task AddPhotoToCity(int cityId, Photo photo);
         Task AddPhotoToHotel(int hotelId, Photo photo);
         Task AddPhotoToRoom(int roomId, Photo photo);
+        Task AddHotelAmenity(int hotelId, HotelAmenity hotelAmenity);
+        Task<(IEnumerable<HotelAmenity>, PaginationMetaData)> GetHotelAmenitiesAsync(string? name,
+                int pageSize, int pageNumber);
+        Task<IEnumerable<HotelAmenity>> GetHotelAmenitiesAsync(int hotelId);
         public void DeletePhoto(Photo photo);
         Task<bool> SaveChangesAsync();
     }

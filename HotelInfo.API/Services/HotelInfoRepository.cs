@@ -1,7 +1,9 @@
-﻿using CityInfo.API.Services;
+﻿using AutoMapper.Configuration.Conventions;
+using CityInfo.API.Services;
 using HotelInfo.API.DbContexts;
 using HotelInfo.API.Entites;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace HotelInfo.API.Services
 {
@@ -82,6 +84,38 @@ namespace HotelInfo.API.Services
 
             return (collectionToReturn, paginationMetaData);
         }
+        public async Task<(IEnumerable<HotelAmenity>, PaginationMetaData)> GetHotelAmenitiesAsync(string? name,
+                int pageSize, int pageNumber)
+        {
+            var collection = _hotelInfoContext.HotelAmenities as IQueryable<HotelAmenity>;
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                name = name.Trim();
+                collection = collection.Where(amenity => amenity.Name.Contains(name));
+            }
+
+            var itemsCount = await collection.CountAsync();
+
+            var paginationMetaData = new PaginationMetaData(pageNumber, itemsCount, pageSize);
+
+            var collectionToReturn = await collection
+                .OrderBy(c => c.Name)
+                .Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (collectionToReturn, paginationMetaData);
+        }
+        public async Task<IEnumerable<HotelAmenity>> GetHotelAmenitiesAsync(int hotelId)
+        {
+            var query = await _hotelInfoContext.Hotels.Include(hotel => hotel.hotelAmenities).SingleOrDefaultAsync(hotel => hotel.Id == hotelId);
+            if (query != null)
+            {
+                return query.hotelAmenities;
+            }
+            return new List<HotelAmenity>();
+        }
 
         public async Task<IEnumerable<Hotel>> GetHotelsAysnc(int cityId)
         {
@@ -144,6 +178,16 @@ namespace HotelInfo.API.Services
             return await _hotelInfoContext.Hotels
                 .SingleOrDefaultAsync(hotel => hotel.Id == hotelId);
         }
+
+        public async Task<Hotel?> GetHotelWithHotelAmenitiesAsync(int hotelId)
+        {
+            var query = await _hotelInfoContext.Hotels.Include(hotel => hotel.hotelAmenities).SingleOrDefaultAsync(hotel => hotel.Id == hotelId);
+            return query;
+        }
+        public async Task<HotelAmenity?> GetHotelAmenityAsync(int hotelAmentiyId)
+        {
+            return await _hotelInfoContext.HotelAmenities.SingleOrDefaultAsync(hotelamenity => hotelamenity.Id == hotelAmentiyId);
+        } 
         public async Task<Hotel?> GetHotelWithPhotosAsync(int hotelId)
         {
             return await _hotelInfoContext.Hotels
@@ -215,6 +259,15 @@ namespace HotelInfo.API.Services
             }
         }
 
+        public async Task AddHotelAmenity(int hotelId, HotelAmenity hotelAmenity)
+        {
+            var hotel = await GetHotelAsync(hotelId, false);
+            if (hotel != null)
+            {
+                hotel.hotelAmenities.Add(hotelAmenity);
+            }
+        }
+
         public async Task<bool> CityExistsAsync(int cityId)
         {
             return await _hotelInfoContext.Cities.AnyAsync(city => city.Id == cityId);
@@ -251,6 +304,15 @@ namespace HotelInfo.API.Services
         public void DeletePhoto(Photo photo)
         {
             _hotelInfoContext.Photos.Remove(photo);
+        }
+
+        public async void DeleteHotelAmenity(int hotelId, HotelAmenity hotelAmenity)
+        {
+            var hotel = await _hotelInfoContext.Hotels.SingleOrDefaultAsync(hotel => hotel.Id == hotelId);
+            if (hotel != null)
+            {
+                hotel.hotelAmenities.Remove(hotelAmenity);
+            }
         }
 
         public async Task<bool> SaveChangesAsync()
