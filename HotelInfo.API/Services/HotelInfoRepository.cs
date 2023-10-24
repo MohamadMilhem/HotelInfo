@@ -107,6 +107,29 @@ namespace HotelInfo.API.Services
 
             return (collectionToReturn, paginationMetaData);
         }
+        public async Task<(IEnumerable<RoomAmenity>, PaginationMetaData)> GetRoomAmenitiesAsync(string? name,
+            int pageSize, int pageNumber)
+        {
+            var collection = _hotelInfoContext.RoomAmenities as IQueryable<RoomAmenity>;
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                name = name.Trim();
+                collection = collection.Where(amenity => amenity.Name.Contains(name));
+            }
+
+            var itemsCount = await collection.CountAsync();
+
+            var paginationMetaData = new PaginationMetaData(pageNumber, itemsCount, pageSize);
+
+            var collectionToReturn = await collection
+                .OrderBy(c => c.Name)
+                .Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (collectionToReturn, paginationMetaData);
+        }
         public async Task<IEnumerable<HotelAmenity>> GetHotelAmenitiesAsync(int hotelId)
         {
             var query = await _hotelInfoContext.Hotels.Include(hotel => hotel.HotelAmenities).SingleOrDefaultAsync(hotel => hotel.Id == hotelId);
@@ -116,7 +139,16 @@ namespace HotelInfo.API.Services
             }
             return new List<HotelAmenity>();
         }
-
+        public async Task<IEnumerable<RoomAmenity>> GetRoomAmenitiesAsync(int roomId)
+        {
+            var query = await _hotelInfoContext.Rooms.Include(room => room.RoomAmenities)
+                .SingleOrDefaultAsync(room => room.Id == roomId);
+            if (query != null)
+            {
+                return query.RoomAmenities;
+            }
+            return new List<RoomAmenity>();
+        }
         public async Task<IEnumerable<Hotel>> GetHotelsAysnc(int cityId)
         {
             var query = await _hotelInfoContext.Hotels.Where(hotel => hotel.CityId == cityId).ToListAsync();
@@ -181,12 +213,25 @@ namespace HotelInfo.API.Services
 
         public async Task<Hotel?> GetHotelWithHotelAmenitiesAsync(int hotelId)
         {
-            var query = await _hotelInfoContext.Hotels.Include(hotel => hotel.HotelAmenities).SingleOrDefaultAsync(hotel => hotel.Id == hotelId);
+            var query = await _hotelInfoContext.Hotels.Include(hotel => hotel.HotelAmenities)
+                .SingleOrDefaultAsync(hotel => hotel.Id == hotelId);
+            return query;
+        }
+        public async Task<Room?> GetRoomWithRoomAmenitiesAsync(int roomId)
+        {
+            var query = await _hotelInfoContext.Rooms.Include(room => room.RoomAmenities)
+                .SingleOrDefaultAsync(room => room.Id == roomId);
             return query;
         }
         public async Task<HotelAmenity?> GetHotelAmenityAsync(int hotelAmentiyId)
         {
-            return await _hotelInfoContext.HotelAmenities.SingleOrDefaultAsync(hotelamenity => hotelamenity.Id == hotelAmentiyId);
+            return await _hotelInfoContext.HotelAmenities
+                .SingleOrDefaultAsync(hotelAmenity => hotelAmenity.Id == hotelAmentiyId);
+        } 
+        public async Task<RoomAmenity?> GetRoomAmenityAsync(int roomAmenityId)
+        {
+            return await _hotelInfoContext.RoomAmenities
+                .SingleOrDefaultAsync(roomAmenity => roomAmenity.Id == roomAmenityId);
         } 
         public async Task<Hotel?> GetHotelWithPhotosAsync(int hotelId)
         {
@@ -267,7 +312,14 @@ namespace HotelInfo.API.Services
                 hotel.HotelAmenities.Add(hotelAmenity);
             }
         }
-
+        public async Task AddRoomAmenity(int roomId, RoomAmenity roomAmenity)
+        {
+            var room = await GetRoomAsync(roomId);
+            if (room != null)
+            {
+                room.RoomAmenities.Add(roomAmenity);
+            }
+        }
         public async Task<bool> CityExistsAsync(int cityId)
         {
             return await _hotelInfoContext.Cities.AnyAsync(city => city.Id == cityId);
@@ -312,6 +364,14 @@ namespace HotelInfo.API.Services
             if (hotel != null)
             {
                 hotel.HotelAmenities.Remove(hotelAmenity);
+            }
+        }
+        public async void DeleteRoomAmenity(int roomId, RoomAmenity roomAmenity)
+        {
+            var room = await _hotelInfoContext.Rooms.SingleOrDefaultAsync(room => room.Id == roomId);
+            if (room != null)
+            {
+                room.RoomAmenities.Remove(roomAmenity);
             }
         }
 

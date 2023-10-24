@@ -38,8 +38,17 @@ namespace HotelInfo.API.Services
         Task AddHotelAmenity(int hotelId, HotelAmenity hotelAmenity);
         Task<(IEnumerable<HotelAmenity>, PaginationMetaData)> GetHotelAmenitiesAsync(string? name,
                 int pageSize, int pageNumber);
+
+        Task<(IEnumerable<RoomAmenity>, PaginationMetaData)> GetRoomAmenitiesAsync(string? name,
+            int pageSize, int pageNumber);
         Task<IEnumerable<HotelAmenity>> GetHotelAmenitiesAsync(int hotelId);
         public void DeletePhoto(Photo photo);
         Task<bool> SaveChangesAsync();
+        Task<IEnumerable<RoomAmenity>> GetRoomAmenitiesAsync(int roomId);
+        Task<Room?> GetRoomWithRoomAmenitiesAsync(int roomId);
+        Task<RoomAmenity?> GetRoomAmenityAsync(int roomAmenityId);
+        Task AddRoomAmenity(int roomId, RoomAmenity roomAmenity);
+        Task<bool> PhotoExistsAsync(int photoId);
+        void DeleteRoomAmenity(int roomId, RoomAmenity roomAmenity);
     }
 }
