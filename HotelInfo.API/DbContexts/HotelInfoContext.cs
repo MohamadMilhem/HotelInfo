@@ -32,6 +32,9 @@ namespace HotelInfo.API.DbContexts
             modelBuilder.Entity<Hotel>()
                 .HasMany(hotel => hotel.HotelAmenities)
                 .WithMany();
+            modelBuilder.Entity<Room>()
+                .HasMany(hotel => hotel.RoomAmenities)
+                .WithMany();
         }
 
     }
