@@ -351,7 +351,7 @@ namespace HotelInfo.API.Controllers
         [HttpGet("{hotelId}/amenities")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<HotelAmenity>>> GetAmenitiesAsync(int hotelId)
+        public async Task<ActionResult<IEnumerable<HotelAmenityDto>>> GetHotelAmenitiesAsync(int hotelId)
         {
             if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
             {
@@ -360,7 +360,7 @@ namespace HotelInfo.API.Controllers
 
             var amenities = await _hotelInfoRepository.GetHotelAmenitiesAsync(hotelId);
 
-            return Ok(amenities);
+            return Ok(_mapper.Map<IEnumerable<HotelAmenityDto>>(amenities));
 
         }
         /// <summary>
@@ -373,14 +373,14 @@ namespace HotelInfo.API.Controllers
         [HttpPost("{hotelId}/amenities")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<HotelAmenityDto>> AddHotelAmenity(int hotelId,  HotelAmenityForCreationDto hotelamenityForCreationDto)
+        public async Task<ActionResult<HotelAmenityDto>> AddHotelAmenity(int hotelId,  HotelAmenityForCreationDto hotelAmenityForCreationDto)
         {
             if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
             {
                 return NotFound();
             }
 
-            var hotelAmenityToStore = _mapper.Map<Entites.HotelAmenity>(hotelamenityForCreationDto);
+            var hotelAmenityToStore = _mapper.Map<Entites.HotelAmenity>(hotelAmenityForCreationDto);
 
             await _hotelInfoRepository.AddHotelAmenity(hotelId, hotelAmenityToStore);
             await _hotelInfoRepository.SaveChangesAsync();
@@ -414,7 +414,7 @@ namespace HotelInfo.API.Controllers
 
             var hotel = await _hotelInfoRepository.GetHotelWithHotelAmenitiesAsync(hotelId);
 
-            var hotelAmenityToDelete = hotel.hotelAmenities
+            var hotelAmenityToDelete = hotel.HotelAmenities
                 .Where(hotelAmenity => hotelAmenity.Id == hotelAmenityId)
                 .SingleOrDefault();
 

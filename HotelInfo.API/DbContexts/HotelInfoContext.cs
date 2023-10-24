@@ -13,6 +13,7 @@ namespace HotelInfo.API.DbContexts
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<HotelAmenity> HotelAmenities { get; set; }
+        public DbSet<RoomAmenity> RoomAmenities { get; set; }
 
 
         public HotelInfoContext(IConfiguration configuration)
@@ -29,7 +30,7 @@ namespace HotelInfo.API.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Hotel>()
-                .HasMany(hotel => hotel.hotelAmenities)
+                .HasMany(hotel => hotel.HotelAmenities)
                 .WithMany();
         }
 
