@@ -14,6 +14,7 @@ namespace HotelInfo.API.DbContexts
         public DbSet<Photo> Photos { get; set; }
         public DbSet<HotelAmenity> HotelAmenities { get; set; }
         public DbSet<RoomAmenity> RoomAmenities { get; set; }
+        public DbSet<RoomClass> RoomClasses { get; set; }
 
 
         public HotelInfoContext(IConfiguration configuration)
