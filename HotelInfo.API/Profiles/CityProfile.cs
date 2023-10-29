@@ -15,6 +15,10 @@ namespace HotelInfo.API.Profiles
             CreateMap<CityForCreationDto, Entites.City>();
             CreateMap<Entites.City, CityForUpdateDto>();
             CreateMap<CityForUpdateDto, Entites.City>();
+            
+            CreateMap<Entites.City, CitySearchResult>()
+                .ForMember(dest => dest.ThumbnailImage,
+                    opt => opt.MapFrom(src => src.Photos.SingleOrDefault(photo => photo.Id == src.ThumbnailImageId)));
         }
     }
 }
