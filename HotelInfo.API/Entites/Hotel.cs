@@ -22,6 +22,7 @@ namespace HotelInfo.API.Entites
         public int StarRating { get; set; }
         public decimal Latitude { get; set; }
         public decimal Longitude { get; set; }
+        public int ThumbnailImageId { get; set; }
         public ICollection<Room> Rooms { get; set; } = new List<Room>();
         public ICollection<Photo> Photos { get; set; } = new List<Photo>();
         public ICollection<HotelAmenity> HotelAmenities { get; set; } = new List<HotelAmenity>();
