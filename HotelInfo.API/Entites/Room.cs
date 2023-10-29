@@ -16,6 +16,9 @@ namespace HotelInfo.API.Entites
         public int HotelId { get; set; }
         public ICollection<Photo> Photos { get; set; } = new List<Photo>();
         public ICollection<RoomAmenity> RoomAmenities { get; set; } = new List<RoomAmenity>();
+        public RoomClass? RoomClass { get; set; }
+        [ForeignKey(nameof(RoomClassId))] 
+        public int? RoomClassId { get; set; }
 
         public Room( string roomNumber)
         {

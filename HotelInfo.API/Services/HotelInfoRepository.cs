@@ -27,7 +27,7 @@ namespace HotelInfo.API.Services
             int pageSize, int pageNumber)
         {
             var collection = _hotelInfoContext.Cities as IQueryable<City>;
-            collection = collection.Include(city => city.Photos);Ho
+            collection = collection.Include(city => city.Photos);
             if (!string.IsNullOrWhiteSpace(name))
             {
                 name = name.Trim();
