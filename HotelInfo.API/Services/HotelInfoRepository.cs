@@ -2,6 +2,7 @@
 using CityInfo.API.Services;
 using HotelInfo.API.DbContexts;
 using HotelInfo.API.Entites;
+using HotelInfo.API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
@@ -26,7 +27,7 @@ namespace HotelInfo.API.Services
             int pageSize, int pageNumber)
         {
             var collection = _hotelInfoContext.Cities as IQueryable<City>;
-
+            collection = collection.Include(city => city.Photos);Ho
             if (!string.IsNullOrWhiteSpace(name))
             {
                 name = name.Trim();
@@ -57,7 +58,8 @@ namespace HotelInfo.API.Services
             int pageSize, int pageNumber)
         {
             var collection = _hotelInfoContext.Hotels as IQueryable<Hotel>;
-
+            collection = collection.Include(hotel => hotel.Photos);
+            
             if (!string.IsNullOrWhiteSpace(name))
             {
                 name = name.Trim();
