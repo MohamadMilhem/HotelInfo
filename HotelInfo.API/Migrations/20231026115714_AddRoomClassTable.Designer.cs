@@ -4,6 +4,7 @@ using HotelInfo.API.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotelInfo.API.Migrations
 {
     [DbContext(typeof(HotelInfoContext))]
-    partial class HotelInfoContextModelSnapshot : ModelSnapshot
+    [Migration("20231026115714_AddRoomClassTable")]
+    partial class AddRoomClassTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,9 +58,6 @@ namespace HotelInfo.API.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("ThumbnailImageId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Cities");
@@ -94,9 +94,6 @@ namespace HotelInfo.API.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("StarRating")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ThumbnailImageId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -292,13 +289,11 @@ namespace HotelInfo.API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HotelInfo.API.Entites.RoomClass", "RoomClass")
+                    b.HasOne("HotelInfo.API.Entites.RoomClass", null)
                         .WithMany("Rooms")
                         .HasForeignKey("RoomClassId");
 
                     b.Navigation("Hotel");
-
-                    b.Navigation("RoomClass");
                 });
 
             modelBuilder.Entity("RoomRoomAmenity", b =>
