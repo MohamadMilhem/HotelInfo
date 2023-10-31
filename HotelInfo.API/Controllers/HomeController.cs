@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections;
+using AutoMapper;
 using HotelInfo.API.Entites;
 using HotelInfo.API.Models;
 using HotelInfo.API.Services;
@@ -9,14 +10,14 @@ using System.Text.Json;
 namespace HotelInfo.API.Controllers
 {
     [ApiController]
-    [Route("api/main")]
-    public class MainController : ControllerBase
+    [Route("api/home")]
+    public class HomeController : ControllerBase
     {
         private readonly IHotelInfoRepository _hotelInfoRepository;
         private readonly IMapper _mapper;
         const int maxPageSize = 20;
 
-        public MainController(IHotelInfoRepository hotelInfoRepository, IMapper mapper)
+        public HomeController(IHotelInfoRepository hotelInfoRepository, IMapper mapper)
         {
             _hotelInfoRepository = hotelInfoRepository ?? throw new ArgumentNullException(nameof(hotelInfoRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
@@ -50,7 +51,22 @@ namespace HotelInfo.API.Controllers
             var hotelsToReturn = _mapper.Map<IEnumerable<HotelSearchResult>>(hotels.Take(5));
             return Ok(hotelsToReturn);
         }
-        
+
+        [HttpGet("FeaturedDeals")]
+        public async Task<IActionResult> GetFeaturedDeals()
+        {
+            var (hotels, paginationMetaData) = await _hotelInfoRepository.GetHotelsAsync(null, null, 5, 1);
+            var hotelsToReturn = _mapper.Map<IEnumerable<HotelSearchResult>>(hotels);
+            return Ok(hotelsToReturn);
+        }
+
+        [HttpGet("Cities")]
+        public async Task<IActionResult> GetCities()
+        {
+            var (cities, paginationMetaData) = await _hotelInfoRepository.GetCitiesAsync(null, null, 5, 1);
+            var citiesToReturn = _mapper.Map<IEnumerable<CitySearchResult>>(cities);
+            return Ok(citiesToReturn);
+        }
         
     }
 }
