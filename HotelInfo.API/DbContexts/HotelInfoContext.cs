@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using HotelInfo.API.Entites;
+using HotelInfo.API.Models;
 using Microsoft.Extensions.Hosting;
 
 namespace HotelInfo.API.DbContexts
@@ -34,6 +35,9 @@ namespace HotelInfo.API.DbContexts
                 .HasMany(hotel => hotel.HotelAmenities)
                 .WithMany();
             modelBuilder.Entity<Room>()
+                .HasMany(hotel => hotel.RoomAmenities)
+                .WithMany();
+            modelBuilder.Entity<RoomClass>()
                 .HasMany(hotel => hotel.RoomAmenities)
                 .WithMany();
         }
