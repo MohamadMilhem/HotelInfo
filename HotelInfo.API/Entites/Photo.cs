@@ -20,6 +20,9 @@ namespace HotelInfo.API.Entites
         [ForeignKey(nameof(RoomId))]
         public Room? Room { get; set; }
         public int? RoomId { get; set; }
+        [ForeignKey(nameof(RoomClassId))]
+        public RoomClass? RoomClass { get; set; }
+        public int? RoomClassId { get; set; }
 
         [Required]
         [MaxLength(500)]

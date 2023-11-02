@@ -11,6 +11,8 @@ public class RoomClass
     public decimal StandardCost { get; set; }
     public string? Description { get; set; }
     public ICollection<Room> Rooms { get; set; } = new List<Room>();
+    public ICollection<RoomAmenity> RoomAmenities { get; set; } = new List<RoomAmenity>();
+    public ICollection<Photo> Photos { get; set; } = new List<Photo>();
 
     public RoomClass(decimal standardCost, string? description)
     {
