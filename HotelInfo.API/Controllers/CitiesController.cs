@@ -220,7 +220,7 @@ namespace HotelInfo.API.Controllers
                 return NotFound();
             }
 
-            var hotels = await _hotelInfoRepository.GetHotelsAysnc(cityId);
+            var hotels = await _hotelInfoRepository.GetHotelsAsync(cityId);
 
             return Ok(_mapper.Map<IEnumerable<HotelWithoutRooms>>(hotels));
 
@@ -310,7 +310,7 @@ namespace HotelInfo.API.Controllers
                 return NotFound();
             }
 
-            var photos = await _hotelInfoRepository.GetPhotosCityAysnc(cityId);
+            var photos = await _hotelInfoRepository.GetPhotosCityAsync(cityId);
 
             return Ok(_mapper.Map<IEnumerable<PhotoDto>>(photos));
 

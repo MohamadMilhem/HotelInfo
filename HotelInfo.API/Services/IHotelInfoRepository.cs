@@ -1,5 +1,7 @@
-﻿using CityInfo.API.Services;
+﻿using System.Collections;
+using CityInfo.API.Services;
 using HotelInfo.API.Entites;
+using HotelInfo.API.Models;
 
 namespace HotelInfo.API.Services
 {
@@ -8,7 +10,7 @@ namespace HotelInfo.API.Services
         Task<bool> CityExistsAsync(int cityId);
         Task CreateCityAsync(City city);
         Task CreateHotelAsync(int cityId, Hotel hotel);
-        Task CreateRoom(int hotelId, Room room);
+        Task CreateRoomAsync(int hotelId, Room room);
         void DeleteCity(City city);
         void DeleteHotel(Hotel hotel);
         void DeleteRoom(Room room);
@@ -18,14 +20,14 @@ namespace HotelInfo.API.Services
         Task<City?> GetCityAsync(int cityId, bool includeHotels);
         Task<Hotel?> GetHotelAsync(int hotelId, bool includeRooms);
         Task<(IEnumerable<Hotel>, PaginationMetaData)> GetHotelsAsync(string? name, string? searchQuery, int pageSize, int pageNumber);
-        Task<IEnumerable<Hotel>> GetHotelsAysnc(int cityId);
+        Task<IEnumerable<Hotel>> GetHotelsAsync(int cityId);
         Task<Room?> GetRoomAsync(int roomId);
-        Task<IEnumerable<Room>> GetRoomsAysnc(int hotelId);
+        Task<IEnumerable<Room>> GetRoomsAsync(int hotelId);
         Task<bool> HotelExistsAsync(int hotelId);
         Task<bool> RoomExistsAsync(int roomId);
-        Task<IEnumerable<Photo>> GetPhotosCityAysnc(int cityId);
-        Task<IEnumerable<Photo>> GetPhotosHotelAysnc(int hotelId);
-        Task<IEnumerable<Photo>> GetPhotosRoomAysnc(int roomId);
+        Task<IEnumerable<Photo>> GetPhotosCityAsync(int cityId);
+        Task<IEnumerable<Photo>> GetPhotosHotelAsync(int hotelId);
+        Task<IEnumerable<Photo>> GetPhotosRoomAsync(int roomId);
         Task<City?> GetCityWithPhotosAsync(int cityId);
         Task<Hotel?> GetHotelWithPhotosAsync(int hotelId);
         Task<Room?> GetRoomWithPhotosAsync(int roomId);
@@ -50,5 +52,17 @@ namespace HotelInfo.API.Services
         Task AddRoomAmenity(int roomId, RoomAmenity roomAmenity);
         Task<bool> PhotoExistsAsync(int photoId);
         void DeleteRoomAmenity(int roomId, RoomAmenity roomAmenity);
+        Task<RoomClass?> GetRoomClassAsync(int id);
+        Task<bool> RoomClassExistsAsync(int roomClassId);
+        Task<IEnumerable<Photo>> GetPhotosRoomClassAsync(int roomClassId);
+        Task CreateRoomClassAsync(RoomClass roomClass);
+        Task AddRoomAmenityToRoomClass(int roomClassId, RoomAmenity roomAmenity);
+        Task AddPhotoToRoomClass(int roomClassId, Photo photo);
+        Task<RoomClass?> GetRoomClassWithPhotosAsync(int roomClassId);
+        Task<IEnumerable<RoomAmenity>> GetRoomAmenitiesForRoomClassAsync(int roomClassId);
+        Task<RoomClass?> GetRoomClassWithRoomAmenitiesAsync(int roomClassId);
+        void DeleteRoomAmenityFromRoomClass(int roomClassId, RoomAmenity roomAmenity);
+        Task AddRoomToRoomClassAsync(int roomClassId, Room room);
+        Task<RoomClass?> GetRoomClassWithRooms(int roomClassId);
     }
 }

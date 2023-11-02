@@ -172,7 +172,7 @@ namespace HotelInfo.API.Controllers
                 return NotFound();
             }
 
-            var rooms = await _hotelInfoRepository.GetRoomsAysnc(hotelId);
+            var rooms = await _hotelInfoRepository.GetRoomsAsync(hotelId);
 
             return Ok(_mapper.Map<IEnumerable<RoomDto>>(rooms));
 
@@ -200,7 +200,7 @@ namespace HotelInfo.API.Controllers
 
             var roomToStore = _mapper.Map<Entites.Room>(roomForCreationDto);
 
-            await _hotelInfoRepository.CreateRoom(hotelId, roomToStore);
+            await _hotelInfoRepository.CreateRoomAsync(hotelId, roomToStore);
             await _hotelInfoRepository.SaveChangesAsync();
 
             var roomToReturn = _mapper.Map<RoomDto>(roomToStore);
@@ -268,7 +268,7 @@ namespace HotelInfo.API.Controllers
                 return NotFound();
             }
 
-            var photos = await _hotelInfoRepository.GetPhotosHotelAysnc(hotelId);
+            var photos = await _hotelInfoRepository.GetPhotosHotelAsync(hotelId);
 
             return Ok(_mapper.Map<IEnumerable<PhotoDto>>(photos));
 

@@ -135,7 +135,7 @@ namespace HotelInfo.API.Controllers
                 return NotFound();
             }
 
-            var photos = await _hotelInfoRepository.GetPhotosRoomAysnc(roomId);
+            var photos = await _hotelInfoRepository.GetPhotosRoomAsync(roomId);
 
             return Ok(_mapper.Map<IEnumerable<PhotoDto>>(photos));
 
@@ -199,9 +199,7 @@ namespace HotelInfo.API.Controllers
             {
                 return NotFound();
             }
-
-            _hotelInfoRepository.DeletePhoto(photoToDelete);
-
+            
             await _hotelInfoRepository.SaveChangesAsync();
 
             return NoContent();
