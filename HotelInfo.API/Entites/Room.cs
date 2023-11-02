@@ -19,10 +19,9 @@ namespace HotelInfo.API.Entites
         public RoomClass? RoomClass { get; set; }
         [ForeignKey(nameof(RoomClassId))] 
         public int? RoomClassId { get; set; }
-
+        public decimal? Cost { get; set; }
         public Room( string roomNumber)
         {
-
             RoomNumber = roomNumber;
         }
     }
