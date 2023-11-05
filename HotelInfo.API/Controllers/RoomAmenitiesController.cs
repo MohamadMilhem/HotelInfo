@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.JsonPatch;
 namespace HotelInfo.API.Controllers
 {
     [ApiController]
-    [Route("api/roomAmenities")]
+    [Route("api/room-amenities")]
     public class RoomAmenitiesController : ControllerBase
     {
         private readonly IHotelInfoRepository _hotelInfoRepository;

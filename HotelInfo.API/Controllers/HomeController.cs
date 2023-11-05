@@ -44,7 +44,7 @@ namespace HotelInfo.API.Controllers
             return Ok(results);
         }
 
-        [HttpGet("RecentlyVisited")]
+        [HttpGet("recently-visited")]
         public async Task<IActionResult> GetRecentlyVisitedHotels()
         {
             var (hotels, paginationMetaData) = await _hotelInfoRepository.GetHotelsAsync(null, null, 10, 1);
@@ -52,7 +52,7 @@ namespace HotelInfo.API.Controllers
             return Ok(hotelsToReturn);
         }
 
-        [HttpGet("FeaturedDeals")]
+        [HttpGet("featured-deals")]
         public async Task<IActionResult> GetFeaturedDeals()
         {
             var (hotels, paginationMetaData) = await _hotelInfoRepository.GetHotelsAsync(null, null, 5, 1);
@@ -60,7 +60,7 @@ namespace HotelInfo.API.Controllers
             return Ok(hotelsToReturn);
         }
 
-        [HttpGet("Cities")]
+        [HttpGet("cities")]
         public async Task<IActionResult> GetCities()
         {
             var (cities, paginationMetaData) = await _hotelInfoRepository.GetCitiesAsync(null, null, 5, 1);

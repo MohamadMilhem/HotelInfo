@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HotelInfo.API.Controllers
 {
     [ApiController]
-    [Route("api/RoomClasses")]
+    [Route("api/room-classes")]
     public class RoomClassesController : ControllerBase
     {
         private readonly IHotelInfoRepository _hotelInfoRepository;
