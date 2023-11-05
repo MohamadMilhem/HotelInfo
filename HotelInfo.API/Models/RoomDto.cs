@@ -8,5 +8,6 @@ namespace HotelInfo.API.Models
     {
         public int Id { get; set; }
         public string RoomNumber { get; set; } = null!;
+        public decimal? Cost { get; set; }
     }
 }
