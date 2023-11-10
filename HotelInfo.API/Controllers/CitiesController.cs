@@ -99,7 +99,7 @@ namespace HotelInfo.API.Controllers
             var cityToReturn = _mapper.Map<CityDto>(cityToStore);
 
             return CreatedAtRoute("GetCity",
-                new { id = cityToReturn.Id },
+                new { cityId = cityToReturn.Id },
                 cityToReturn);
         }
         /// <summary>
