@@ -330,6 +330,11 @@ namespace HotelInfo.API.Services
             }
         }
 
+        public async Task CreatePhotoAsync(Photo photo)
+        {
+            await _hotelInfoContext.Photos.AddAsync(photo);
+        }
+
         public async Task AddRoomToRoomClassAsync(int roomClassId, Room room)
         {
             var roomClass = await GetRoomClassAsync(roomClassId);

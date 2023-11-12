@@ -11,6 +11,7 @@ namespace HotelInfo.API.Services
         Task CreateCityAsync(City city);
         Task CreateHotelAsync(int cityId, Hotel hotel);
         Task CreateRoomAsync(int hotelId, Room room);
+        Task CreatePhotoAsync(Photo photo);
         void DeleteCity(City city);
         void DeleteHotel(Hotel hotel);
         void DeleteRoom(Room room);
