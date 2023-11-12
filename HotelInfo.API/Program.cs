@@ -1,5 +1,6 @@
 using HotelInfo.API.DbContexts;
 using HotelInfo.API.Services;
+using Microsoft.Extensions.Azure;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -10,7 +11,7 @@ namespace HotelInfo.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            
             // Add services to the container.
 
             builder.Services.AddControllers();
@@ -24,13 +25,17 @@ namespace HotelInfo.API
                 setup.IncludeXmlComments(xmlCommentsFullPath);
             });
 
+            var storageConnection = builder.Configuration["ConnectionStrings:HotelReservationWebApi:Storage"];
 
             builder.Services.AddDbContext<HotelInfoContext>();
             builder.Services.AddScoped<IHotelInfoRepository, HotelInfoRepository>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllersWithViews()
                             .AddNewtonsoftJson();
-
+            builder.Services.AddAzureClients(azureBuilder =>
+            {
+                azureBuilder.AddBlobServiceClient(storageConnection);
+            });
 
             var app = builder.Build();
 
