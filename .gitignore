@@ -364,6 +364,9 @@ FodyWeavers.xsd
 
 
 #Custom
-appsettings.Development.json
-HotelInfoContext.dgml
-.idea
+appsettings.Development.json 
+HotelInfoContext.dgml 
+.idea 
+.config 
+ServiceDependencies
+serviceDependencies.json
