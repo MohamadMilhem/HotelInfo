@@ -23,18 +23,18 @@ namespace HotelInfo.API.Controllers
         /// <summary>
         /// Retrieve information about a specific room by its unique identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the room to retrieve.</param>
+        /// <param name="roomId">The unique identifier of the room to retrieve.</param>
         /// <returns>
         /// An <see cref="IActionResult"/> containing information about the specified room. This may include a 200 OK response when successful, or a 404 Not Found response if the room is not found.
         /// </returns>
         /// <response code="200">Indicates a successful retrieval of room information.</response>
         /// <response code="404">Indicates that the specified room was not found.</response>
-        [HttpGet("{id}", Name = "GetRoom")]
+        [HttpGet("{roomId}", Name = "GetRoom")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetRoomAsync(int id)
+        public async Task<IActionResult> GetRoomAsync(int roomId)
         {
-            var room = await _hotelInfoRepository.GetRoomAsync(id);
+            var room = await _hotelInfoRepository.GetRoomAsync(roomId);
 
             if (room == null)
             {
@@ -148,7 +148,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{roomId}/photos")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<PhotoDto>> AddPhoto(int roomId, PhotoForCreationDto photoForCreationDto)
         {
@@ -165,7 +165,7 @@ namespace HotelInfo.API.Controllers
             var photoToReturn = _mapper.Map<PhotoDto>(photoToStore);
 
             return CreatedAtRoute("GetPhoto",
-                new { Id = photoToReturn.Id },
+                new { photoId = photoToReturn.Id },
                 photoToReturn);
 
         }
@@ -236,7 +236,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{roomId}/amenities")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<RoomAmenityDto>> AddRoomAmenity(int roomId,  RoomAmenityForCreationDto roomAmenityForCreationDto)
         {
@@ -253,7 +253,7 @@ namespace HotelInfo.API.Controllers
             var roomAmenityToReturn = _mapper.Map<RoomAmenityDto>(roomAmenityToStore);
 
             return CreatedAtRoute("GetRoomAmenity",
-                new { Id = roomAmenityToReturn.Id },
+                new { roomAmenityId = roomAmenityToReturn.Id },
                 roomAmenityToReturn);
 
         }

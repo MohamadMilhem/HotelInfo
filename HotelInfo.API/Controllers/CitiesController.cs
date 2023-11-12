@@ -233,7 +233,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{cityId}/hotels")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<HotelDto>> CreateHotel(int cityId, HotelForCreationDto hotelForCreationDto)
         {
@@ -250,7 +250,7 @@ namespace HotelInfo.API.Controllers
             var hotelToReturn = _mapper.Map<HotelDto>(hotelToStore);
 
             return CreatedAtRoute("GetHotel",
-                new { Id = hotelToReturn.Id },
+                new { hotelId = hotelToReturn.Id },
                 hotelToReturn);
 
         }
@@ -323,7 +323,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{cityId}/photos")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<PhotoDto>> AddPhoto(int cityId,  PhotoForCreationDto photoForCreationDto)
         {
@@ -340,7 +340,7 @@ namespace HotelInfo.API.Controllers
             var photoToReturn = _mapper.Map<PhotoDto>(photoToStore);
 
             return CreatedAtRoute("GetPhoto",
-                new { Id = photoToReturn.Id },
+                new { photoId = photoToReturn.Id },
                 photoToReturn);
 
         }

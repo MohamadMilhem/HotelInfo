@@ -23,18 +23,18 @@ namespace HotelInfo.API.Controllers
         /// <summary>
         /// Retrieve information about a specific room class by its unique identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the room class to retrieve.</param>
+        /// <param name="roomClassId">The unique identifier of the room class to retrieve.</param>
         /// <returns>
         /// An <see cref="IActionResult"/> containing information about the specified room class. This may include a 200 OK response when successful, or a 404 Not Found response if the room class is not found.
         /// </returns>
         /// <response code="200">Indicates a successful retrieval of room class information.</response>
         /// <response code="404">Indicates that the specified room class was not found.</response>
-        [HttpGet("{id}", Name = "GetRoomClass")]
+        [HttpGet("{roomClassId}", Name = "GetRoomClass")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetRoomClassAsync(int id)
+        public async Task<IActionResult> GetRoomClassAsync(int roomClassId)
         {
-            var roomClass = await _hotelInfoRepository.GetRoomClassAsync(id);
+            var roomClass = await _hotelInfoRepository.GetRoomClassAsync(roomClassId);
 
             if (roomClass == null)
             {
@@ -64,7 +64,7 @@ namespace HotelInfo.API.Controllers
             var roomClassToReturn = _mapper.Map<RoomClassDto>(roomClassToStore);
 
             return CreatedAtRoute("GetRoomClass",
-                new { id = roomClassToReturn.Id },
+                new { roomClassId = roomClassToReturn.Id },
                 roomClassToReturn);
         }
         /// <summary>
@@ -169,7 +169,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{roomClassId}/photos")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<PhotoDto>> AddPhoto(int roomClassId, PhotoForCreationDto photoForCreationDto)
         {
@@ -186,7 +186,7 @@ namespace HotelInfo.API.Controllers
             var photoToReturn = _mapper.Map<PhotoDto>(photoToStore);
 
             return CreatedAtRoute("GetPhoto",
-                new { Id = photoToReturn.Id },
+                new { photoId = photoToReturn.Id },
                 photoToReturn);
 
         }
@@ -260,7 +260,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{roomClassId}/amenities")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<RoomAmenityDto>> AddRoomAmenity(int roomClassId,  RoomAmenityForCreationDto roomAmenityForCreationDto)
         {
@@ -277,7 +277,7 @@ namespace HotelInfo.API.Controllers
             var roomAmenityToReturn = _mapper.Map<RoomAmenityDto>(roomAmenityToStore);
 
             return CreatedAtRoute("GetRoomAmenity",
-                new { Id = roomAmenityToReturn.Id },
+                new { roomAmenityId = roomAmenityToReturn.Id },
                 roomAmenityToReturn);
 
         }
@@ -343,10 +343,10 @@ namespace HotelInfo.API.Controllers
 
         }
         /// <summary>
-        /// Create a new room within a specific room class.
+        /// Add a new room within a specific room class.
         /// </summary>
-        /// <param name="roomClassId">The unique identifier of the room class where the room will be created.</param>
-        /// <param name="roomForCreationDto">The data for creating the room.</param>
+        /// <param name="roomClassId">The unique identifier of the room class where the room will be added.</param>
+        /// <param name="roomId">The unique identifier of the room that will be added.</param>
         /// <returns>
         /// An <see cref="IActionResult"/> representing the result of the operation. This may include a 201 Created response when successful, or a 404 Not Found response if the room class is not found.
         /// </returns>
@@ -375,7 +375,7 @@ namespace HotelInfo.API.Controllers
             var roomToReturn = _mapper.Map<RoomDto>(roomToAdd);
 
             return CreatedAtRoute("GetRoom",
-                new { Id = roomToReturn.Id },
+                new { roomId = roomToReturn.Id },
                 roomToReturn);
 
         }

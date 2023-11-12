@@ -29,7 +29,7 @@ namespace HotelInfo.API.Controllers
         /// <summary>
         /// Retrieve information about a specific photo by its unique identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the photo to retrieve.</param>
+        /// <param name="photoId">The unique identifier of the photo to retrieve.</param>
         /// <returns>
         /// An <see cref="IActionResult"/> containing information about the specified photo. This may include a 200 OK response when successful, or a 404 Not Found response if the photo is not found.
         /// </returns>

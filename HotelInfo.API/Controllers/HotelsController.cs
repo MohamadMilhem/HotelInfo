@@ -53,19 +53,19 @@ namespace HotelInfo.API.Controllers
         /// <summary>
         /// Retrieve information about a hotel by its unique identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the hotel to retrieve.</param>
+        /// <param name="hotelId">The unique identifier of the hotel to retrieve.</param>
         /// <param name="includeRooms">Indicates whether or not to include room details for the hotel.</param>
         /// <returns>
         /// An <see cref="IActionResult"/> containing information about the specified hotel. This may include a 200 OK response when successful, or a 404 Not Found response if the hotel is not found.
         /// </returns>
         /// <response code="200">Indicates a successful retrieval of hotel information.</response>
         /// <response code="404">Indicates that the specified hotel was not found.</response>
-        [HttpGet("{id}", Name = "GetHotel")]
+        [HttpGet("{hotelId}", Name = "GetHotel")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetHotelAsync(int id, bool includeRooms = false)
+        public async Task<IActionResult> GetHotelAsync(int hotelId, bool includeRooms = false)
         {
-            var hotel = await _hotelInfoRepository.GetHotelAsync(id, includeRooms);
+            var hotel = await _hotelInfoRepository.GetHotelAsync(hotelId, includeRooms);
 
             if (hotel == null)
             {
@@ -191,7 +191,7 @@ namespace HotelInfo.API.Controllers
         [HttpPost("{hotelId}/rooms")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<HotelDto>> CreateRoom(int hotelId, RoomForCreationDto roomForCreationDto)
+        public async Task<ActionResult<HotelDto>> AddRoom(int hotelId, RoomForCreationDto roomForCreationDto)
         {
             if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
             {
@@ -206,7 +206,7 @@ namespace HotelInfo.API.Controllers
             var roomToReturn = _mapper.Map<RoomDto>(roomToStore);
 
             return CreatedAtRoute("GetRoom",
-                new { Id = roomToReturn.Id },
+                new { roomId = roomToReturn.Id },
                 roomToReturn);
 
         }
@@ -281,7 +281,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{hotelId}/photos")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<PhotoDto>> AddPhoto(int hotelId,  PhotoForCreationDto photoForCreationDto)
         {
@@ -298,7 +298,7 @@ namespace HotelInfo.API.Controllers
             var photoToReturn = _mapper.Map<PhotoDto>(photoToStore);
 
             return CreatedAtRoute("GetPhoto",
-                new { Id = photoToReturn.Id },
+                new { photoId = photoToReturn.Id },
                 photoToReturn);
 
         }
@@ -371,7 +371,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{hotelId}/amenities")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<HotelAmenityDto>> AddHotelAmenity(int hotelId,  HotelAmenityForCreationDto hotelAmenityForCreationDto)
         {
@@ -388,7 +388,7 @@ namespace HotelInfo.API.Controllers
             var hotelAmenityToReturn = _mapper.Map<HotelAmenityDto>(hotelAmenityToStore);
 
             return CreatedAtRoute("GetHotelAmenity",
-                new { Id = hotelAmenityToReturn.Id },
+                new { hotelAmenityId = hotelAmenityToReturn.Id },
                 hotelAmenityToReturn);
 
         }

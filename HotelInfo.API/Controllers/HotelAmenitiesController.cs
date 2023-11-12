@@ -50,18 +50,18 @@ namespace HotelInfo.API.Controllers
         /// <summary>
         /// Retrieve information about a hotel amenity by its unique identifier.
         /// </summary>
-        /// <param name="id">The unique identifier of the hotel amenity to retrieve.</param>
+        /// <param name="hotelAmenityId">The unique identifier of the hotel amenity to retrieve.</param>
         /// <returns>
         /// An <see cref="IActionResult"/> containing information about the specified amenity. This may include a 200 OK response when successful, or a 404 Not Found response if the amenity is not found.
         /// </returns>
         /// <response code="200">Indicates a successful retrieval of hotel amenity information.</response>
         /// <response code="404">Indicates that the specified hotel amenity was not found.</response>
-        [HttpGet("{id}", Name = "GetHotelAmenity")]
+        [HttpGet("{hotelAmenityId}", Name = "GetHotelAmenity")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetHotelAmenityAsync(int id)
+        public async Task<IActionResult> GetHotelAmenityAsync(int hotelAmenityId)
         {
-            var amenity = await _hotelInfoRepository.GetHotelAmenityAsync(id);
+            var amenity = await _hotelInfoRepository.GetHotelAmenityAsync(hotelAmenityId);
 
             if (amenity == null)
             {
@@ -99,11 +99,11 @@ namespace HotelInfo.API.Controllers
 
             return NoContent();
         }
-        
+
         /// <summary>
         /// Partially update information about a specific hotel amenity.
         /// </summary>
-        /// <param name="hotelId">The unique identifier of the hotel amenity to partially update.</param>
+        /// <param name="hotelAmenityId">The unique identifier of the hotel amenity to partially update.</param>
         /// <param name="patchDocument">A JSON patch document containing the changes to apply to the hotel amenity.</param>
         /// <returns>
         /// An <see cref="IActionResult"/> indicating the result of the partial update operation. This may include a 204 No Content response when successful, a 400 Bad Request response if the request is invalid, or a 404 Not Found response if the hotel amenity is not found.
