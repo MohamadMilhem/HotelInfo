@@ -25,7 +25,7 @@ namespace HotelInfo.API.DbContexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_configuration["ConnectionStrings:SSMSConnectionString"]);
+            optionsBuilder.UseSqlServer(_configuration["ConnectionStrings:HotelReservationWebApi:SqlDb"]);
             base.OnConfiguring(optionsBuilder);
         }
 
