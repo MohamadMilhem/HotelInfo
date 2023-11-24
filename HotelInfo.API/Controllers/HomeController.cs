@@ -6,6 +6,7 @@ using HotelInfo.API.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Microsoft.AspNetCore.Identity;
 
 namespace HotelInfo.API.Controllers
 {
@@ -281,12 +282,48 @@ namespace HotelInfo.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("cities")]
-        public async Task<IActionResult> GetCities()
+        [HttpGet("/destinations/trending")]
+        public async Task<ActionResult<IEnumerable<Destination>>> GetTrendingDestinations()
         {
-            var (cities, paginationMetaData) = await _hotelInfoRepository.GetCitiesAsync(null, null, 5, 1);
-            var citiesToReturn = _mapper.Map<IEnumerable<CitySearchResult>>(cities);
-            return Ok(citiesToReturn);
+            var result = new List<Destination>()
+            {
+                new Destination()
+                {
+                    CityName = "Ramallah",
+                    CountryName = "Palestine",
+                    Description = "Explore the vibrant city of Ramallah, known for its rich history and cultural diversity. Discover historical landmarks, bustling markets, and enjoy the warmth of Palestinian hospitality.",
+                    ThumbnailUrl = "https://www.irishtimes.com/resizer/zKAUput0v-pdbzu3keSyhWThHJY=/1600x0/filters:format(jpg):quality(70)/cloudfront-eu-central-1.images.arcpublishing.com/irishtimes/N4P6EWEXC55QQBJJ5Q43X66BPU.jpg"
+                },
+                new Destination()
+                {
+                    CityName = "New York",
+                    CountryName = "United States",
+                    Description = "Experience the iconic cityscape of New York, where skyscrapers touch the clouds and diverse cultures converge. Visit famous landmarks, explore Central Park, and indulge in world-class dining.",
+                    ThumbnailUrl = "https://worldstrides.com/wp-content/uploads/2015/07/iStock_000040849990_Large.jpg"
+                },
+                new Destination()
+                {
+                    CityName = "Paris",
+                    CountryName = "France",
+                    Description = "Fall in love with the romantic charm of Paris, the 'City of Lights.' Admire the Eiffel Tower, stroll along the Seine River, and savor delicious pastries in charming cafes.",
+                    ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg/1200px-La_Tour_Eiffel_vue_de_la_Tour_Saint-Jacques%2C_Paris_ao%C3%BBt_2014_%282%29.jpg"
+                },
+                new Destination()
+                {
+                    CityName = "Tokyo",
+                    CountryName = "Japan",
+                    Description = "Immerse yourself in the futuristic cityscape of Tokyo. Discover a perfect blend of traditional temples and modern technology. Experience vibrant street life and exquisite Japanese cuisine.",
+                    ThumbnailUrl = "https://www.gotokyo.org/en/plan/tokyo-outline/images/main.jpg"
+                },
+                new Destination()
+                {
+                    CityName = "Cape Town",
+                    CountryName = "South Africa",
+                    Description = "Enjoy the breathtaking landscapes of Cape Town. From the iconic Table Mountain to pristine beaches, experience the natural beauty and cultural richness of this South African gem.",
+                    ThumbnailUrl = "https://cdn.britannica.com/42/126842-050-0803BC41/Sea-Point-Cape-Town-SAf.jpg"
+                }
+            };
+            return Ok(result);
         }
         
     }
