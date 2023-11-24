@@ -162,12 +162,55 @@ namespace HotelInfo.API.Controllers
         }
 
         [HttpGet("/users/{userId}/recent-hotels")]
-        public async Task<IActionResult> GetRecentlyVisitedHotels(int userId)
+        public async Task<ActionResult<IEnumerable<RecentHotelResultDto>>> GetRecentlyVisitedHotels(int userId)
         {
-            var (hotels, paginationMetaData) = await _hotelInfoRepository.GetHotelsAsync(null, null, 10, 1);
-            var hotelsToReturn = _mapper.Map<IEnumerable<HotelSearchResult>>(hotels.Take(5));
-            return Ok(hotelsToReturn);
+            var result = new List<RecentHotelResultDto>()
+            {
+                new RecentHotelResultDto()
+                {
+                    HotelName = "Plaza Hotel",
+                    StarRating = 5,
+                    VisitDate = new DateTime(2022, 11, 24),
+                    CityName = "Ramallah",
+                    ThumbnailUrl = "https://cf.bstatic.com/xdata/images/hotel/max1024x768/98271882.jpg?k=cc5964ba081d4c585e3daa9d1c532a8c002c563637238f9bc94896c5daa98496&o=&hp=1"
+                },
+                new RecentHotelResultDto()
+                {
+                    HotelName = "Sunset Resort",
+                    StarRating = 4,
+                    VisitDate = new DateTime(2022, 10, 15),
+                    CityName = "Los Angeles",
+                    ThumbnailUrl = "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/2a/c2/96/sunset-resort.jpg?w=700&h=-1&s=1"
+                },
+                new RecentHotelResultDto()
+                {
+                    HotelName = "Ocean View Inn",
+                    StarRating = 3,
+                    VisitDate = new DateTime(2022, 9, 5),
+                    CityName = "New York",
+                    ThumbnailUrl = "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=600"
+                },
+                new RecentHotelResultDto()
+                {
+                    HotelName = "Mountain Retreat",
+                    StarRating = 4,
+                    VisitDate = new DateTime(2022, 8, 20),
+                    CityName = "Denver",
+                    ThumbnailUrl = "https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                },
+                new RecentHotelResultDto()
+                {
+                    HotelName = "Seaside Retreat",
+                    StarRating = 4,
+                    VisitDate = new DateTime(2022, 7, 10),
+                    CityName = "San Francisco",
+                    ThumbnailUrl = "https://images.pexels.com/photos/1134176/pexels-photo-1134176.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                }
+            };
+
+            return Ok(result);
         }
+        
 
         [HttpGet("featured-deals")]
         public async Task<IActionResult> GetFeaturedDeals()
