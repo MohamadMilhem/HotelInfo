@@ -65,6 +65,28 @@ namespace HotelInfo.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetHotelAsync(int hotelId, bool includeRooms = false)
         {
+            
+            var result = new HotelDetailedDto()
+            {
+                HotelName = "Plaza Hotel",
+                Location = "Ramallah, Palestine",
+                Description =
+                    "Experience luxury and comfort at Plaza Hotel, located in the heart of Ramallah. Our hotel offers a perfect blend of modern amenities and traditional hospitality.",
+                Amenities = new List<FilterAmenityDto>()
+                {
+                    new FilterAmenityDto()
+                        { Name = "Free Wi-Fi", Description = "High-speed internet available in all rooms." },
+                    new FilterAmenityDto()
+                        { Name = "Fitness Center", Description = "Stay fit with our well-equipped fitness center." },
+                    new FilterAmenityDto()
+                        { Name = "Swimming Pool", Description = "Relax by the poolside and enjoy a refreshing swim." }
+                },
+                StarRating = 5,
+                AvailableRooms = 50,
+                ImageUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/98271882.jpg?k=cc5964ba081d4c585e3daa9d1c532a8c002c563637238f9bc94896c5daa98496&o=&hp=1"
+            };
+            return Ok(result);
+            
             var hotel = await _hotelInfoRepository.GetHotelAsync(hotelId, includeRooms);
 
             if (hotel == null)
@@ -258,11 +280,12 @@ namespace HotelInfo.API.Controllers
         /// </returns>
         /// <response code="200">Indicates a successful retrieval of photos of the specified hotel.</response>
         /// <response code="404">Indicates that the specified hotel was not found.</response>
-        [HttpGet("{hotelId}/photos")]
+        [HttpGet("{hotelId}/gallery")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<PhotoDto>>> GetPhotosAsync(int hotelId)
         {
+            hotelId = 1;
             if (!await _hotelInfoRepository.HotelExistsAsync(hotelId))
             {
                 return NotFound();
