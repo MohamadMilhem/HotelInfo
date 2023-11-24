@@ -10,4 +10,6 @@ public class RoomAmenity
     [Required]
     [StringLength(50)]
     public string Name { get; set; }
+    [StringLength(500)]
+    public string? Description { get; set; }
 }
