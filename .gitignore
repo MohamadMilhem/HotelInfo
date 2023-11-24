@@ -370,3 +370,4 @@ HotelInfoContext.dgml
 .config 
 ServiceDependencies
 serviceDependencies.json
+*.designer.cs
