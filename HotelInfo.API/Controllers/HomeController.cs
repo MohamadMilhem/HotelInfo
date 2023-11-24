@@ -213,11 +213,72 @@ namespace HotelInfo.API.Controllers
         
 
         [HttpGet("featured-deals")]
-        public async Task<IActionResult> GetFeaturedDeals()
+        public async Task<ActionResult<IEnumerable<FeaturedDealDto>>> GetFeaturedDeals()
         {
-            var (hotels, paginationMetaData) = await _hotelInfoRepository.GetHotelsAsync(null, null, 5, 1);
-            var hotelsToReturn = _mapper.Map<IEnumerable<HotelSearchResult>>(hotels);
-            return Ok(hotelsToReturn);
+            var result = new List<FeaturedDealDto>()
+            {
+                    new FeaturedDealDto()
+                    {
+                        OriginalRoomPrice = 200,
+                        Discount = (decimal)0.50,
+                        FinalPrice = 100,
+                        CityName = "Ramallah",
+                        HotelName = "Plaza Hotel",
+                        HotelStarRating = 5,
+                        Title = "Luxury South Suite",
+                        Description = "Experience ultimate luxury in our South Suite at Plaza Hotel. This spacious suite offers breathtaking views of the city and is equipped with state-of-the-art amenities for an unforgettable stay.",
+                        RoomPhotoUrl = "https://images.pexels.com/photos/271618/pexels-photo-271618.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    },
+                    new FeaturedDealDto()
+                    {
+                        OriginalRoomPrice = 150,
+                        Discount = (decimal)0.40,
+                        FinalPrice = 90,
+                        CityName = "Los Angeles",
+                        HotelName = "Sunset Resort",
+                        HotelStarRating = 4,
+                        Title = "Ocean View Retreat",
+                        Description = "Escape to the serenity of Sunset Resort's Ocean View Retreat. Enjoy the calming sounds of the waves and stunning views of the ocean from your cozy room. Perfect for a relaxing getaway.",
+                        RoomPhotoUrl = "https://images.pexels.com/photos/172872/pexels-photo-172872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    },
+                    new FeaturedDealDto()
+                    {
+                        OriginalRoomPrice = 120,
+                        Discount = (decimal)0.30,
+                        FinalPrice = 84,
+                        CityName = "New York",
+                        HotelName = "Metropolitan Suites",
+                        HotelStarRating = 4,
+                        Title = "Metropolitan Suite",
+                        Description = "Indulge in luxury with our Metropolitan Suite at Metropolitan Suites. Experience modern elegance, sophisticated design, and top-notch amenities in the heart of New York City.",
+                        RoomPhotoUrl = "https://images.pexels.com/photos/2736388/pexels-photo-2736388.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    },
+                    new FeaturedDealDto()
+                    {
+                        OriginalRoomPrice = 180,
+                        Discount = (decimal)0.45,
+                        FinalPrice = 99,
+                        CityName = "Denver",
+                        HotelName = "Mountain Retreat",
+                        HotelStarRating = 4,
+                        Title = "Mountain View Cabin",
+                        Description = "Unplug and unwind in our Mountain View Cabin at Mountain Retreat. Surrounded by nature, this cozy cabin offers a peaceful retreat with access to scenic hiking trails.",
+                        RoomPhotoUrl = "https://images.pexels.com/photos/271643/pexels-photo-271643.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    },
+                    new FeaturedDealDto()
+                    {
+                        OriginalRoomPrice = 130,
+                        Discount = (decimal)0.35,
+                        FinalPrice = 85,
+                        CityName = "San Francisco",
+                        HotelName = "Seaside Haven",
+                        HotelStarRating = 4,
+                        Title = "Seaside Escape",
+                        Description = "Embrace the coastal charm at Seaside Haven. Our Seaside Escape package offers a comfortable stay with ocean views and convenient access to the city's attractions.",
+                        RoomPhotoUrl = "https://images.pexels.com/photos/2873951/pexels-photo-2873951.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    }
+            };
+            return Ok(result);
         }
 
         [HttpGet("cities")]
