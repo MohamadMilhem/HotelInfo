@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace HotelInfo.API.Controllers
 {
@@ -26,7 +27,7 @@ namespace HotelInfo.API.Controllers
         
         [HttpGet("search")]
         public async Task<ActionResult<IEnumerable<SearchResultDto>>> GetSearchResults(
-            string? checkInDate, string? checkOutDate, int starRate, int numberOfRooms = 1, int adults = 2, int children = 0)
+            string? checkInDate, string? checkOutDate, string? city, int starRate , string? sort, int numberOfRooms = 1, int adults = 2, int children = 0)
         {
             var result = new List<SearchResultDto>()
             {
@@ -157,8 +158,26 @@ namespace HotelInfo.API.Controllers
                 },
                 
             };
+            if (!string.IsNullOrEmpty(city))
+            {
+                result = result.Where(res =>
+                    res.CityName.Contains(city, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
 
+            if (!string.IsNullOrEmpty(sort))
+            {
+                var descending = sort.StartsWith("-");
+                var sortProperty = descending ? sort.Substring(1) : sort;
 
+                var propertyInfo  = typeof(SearchResultDto).GetProperty(sortProperty);
+
+                if (propertyInfo  != null)
+                {
+                    result = descending 
+                        ? result.OrderByDescending(res => propertyInfo.GetValue(res, null)).ToList()
+                        : result.OrderBy(res => propertyInfo.GetValue(res, null)).ToList();
+                }
+            }
             return Ok(result);
         }
 
