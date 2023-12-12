@@ -28,8 +28,8 @@ public class AuthenticationController : ControllerBase
         {
             string authToken = $"your_generated_token_for_{request.Username}";
             string userType = request.Username.ToLower() == "admin" ? "Admin" : "User";
-            Response.Headers.Add("Authorization", $"Bearer {authToken}");
-            var response = new { UserType = userType };
+            //Response.Headers.Add("Authorization", $"Bearer {authToken}");
+            var response = new { UserType = userType, Authorization = $"Bearer {authToken}" };
             return Ok(response);
         }
         return Unauthorized("Invalid username or password.");
