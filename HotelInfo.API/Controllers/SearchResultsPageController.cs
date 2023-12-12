@@ -16,7 +16,7 @@ public class SearchResultsPageController : ControllerBase
         _hotelInfoRepository = hotelInfoRepository ?? throw new ArgumentNullException(nameof(hotelInfoRepository));
     }
     
-    [HttpGet]
+    [HttpGet("Amenities")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<FilterAmenityDto>>> GetAmenities()
     {
