@@ -83,6 +83,8 @@ namespace HotelInfo.API.Controllers
                 },
                 StarRating = 5,
                 AvailableRooms = 50,
+                Longitude =  (decimal)35.206938,
+                Latitude = (decimal)31.916989,
                 ImageUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/98271882.jpg?k=cc5964ba081d4c585e3daa9d1c532a8c002c563637238f9bc94896c5daa98496&o=&hp=1"
             };
             return Ok(result);
