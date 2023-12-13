@@ -6,7 +6,7 @@ using System.Text.Json;
 namespace HotelInfo.API.Controllers;
 
 [ApiController]
-[Route("api/SearchResults")]
+[Route("api/search-results")]
 public class SearchResultsPageController : ControllerBase
 {
     private readonly IHotelInfoRepository _hotelInfoRepository;
@@ -16,7 +16,7 @@ public class SearchResultsPageController : ControllerBase
         _hotelInfoRepository = hotelInfoRepository ?? throw new ArgumentNullException(nameof(hotelInfoRepository));
     }
     
-    [HttpGet("Amenities")]
+    [HttpGet("amenities")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<FilterAmenityDto>>> GetAmenities()
     {
