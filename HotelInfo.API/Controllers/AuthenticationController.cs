@@ -1,5 +1,9 @@
-﻿using HotelInfo.API.Services;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using HotelInfo.API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace HotelInfo.API.Controllers;
 
@@ -7,39 +11,76 @@ namespace HotelInfo.API.Controllers;
 [Route("api/auth")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly IHotelInfoRepository _hotelInfoRepository;  
-    public AuthenticationController(IHotelInfoRepository hotelInfoRepository)
+    private readonly IConfiguration _configuration;
+    public class AuthenticationRequestBody
     {
-        _hotelInfoRepository = hotelInfoRepository ?? throw new ArgumentNullException(nameof(hotelInfoRepository));
+        public string? UserName { get; set; }
+        public string? Password { get; set; }
     }
-    
-    
-    [HttpPost("login")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
+    public class HotelInfoUser
+    {
+        public int UserId { get; set; }
+        public string UserName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string UserType { get; set; }
+
+        public HotelInfoUser(int userId,
+            string userName,
+            string firstName,
+            string lastName,
+            string userType)
+        {
+            UserId = userId;
+            UserName = userName;
+            FirstName = firstName;
+            LastName = lastName;
+            UserType = userType;
+        }
+    }
+    public AuthenticationController(IConfiguration configuration)
+    {
+        _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+    }
+
+    [HttpPost("authenticate")]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public IActionResult Login([FromBody] LoginRequest request)
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<string> Authenticate(AuthenticationRequestBody authenticationRequestBody)
     {
-        if (string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+        var user = ValidateCredentials(authenticationRequestBody.UserName, authenticationRequestBody.Password);
+
+        if (user == null)
         {
-            return BadRequest("Username and password are required.");
+            return Unauthorized();
         }
-        if (request.Username.ToLower() == "user" || request.Username.ToLower() == "admin")
-        {
-            string authToken = $"your_generated_token_for_{request.Username}";
-            string userType = request.Username.ToLower() == "admin" ? "Admin" : "User";
-            //Response.Headers.Add("Authorization", $"Bearer {authToken}");
-            var response = new { UserType = userType, Authorization = $"Bearer {authToken}" };
-            return Ok(response);
-        }
-        return Unauthorized("Invalid username or password.");
+        var securityKey = new SymmetricSecurityKey(
+            Encoding.ASCII.GetBytes(_configuration["Authentication:SecretForKey"]));
+        var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        var tokenClaims = new List<Claim>();
+        tokenClaims.Add(new Claim("sub", user.UserId.ToString()));
+        tokenClaims.Add(new Claim("given_name", user.FirstName));
+        tokenClaims.Add(new Claim("family_name", user.LastName));
+        tokenClaims.Add(new Claim("userType", user.UserType));
+
+        var jwtSecurityToken = new JwtSecurityToken(_configuration["Authentication:Issuer"],
+            null, tokenClaims, DateTime.UtcNow, DateTime.UtcNow.AddHours(1),
+            signingCredentials);
+
+        var tokenToReturn = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+        return Ok(tokenToReturn);
     }
 
-
-    public class LoginRequest
+    private HotelInfoUser ValidateCredentials(string? userName, string? password)
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        if (userName == "admin" && password == "admin")
+            return new HotelInfoUser(1, userName ?? "", "Mohamad", "Milhem", "Admin");
+        if (userName == "user" && password == "user")
+            return new HotelInfoUser(2, userName ?? "", "Mazen", "Sami", "User");
+        return null;
     }
     
     

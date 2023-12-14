@@ -1,11 +1,13 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using HotelInfo.API.Models;
 using HotelInfo.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelInfo.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/bookings")]
 public class BookingsController : ControllerBase
 {
@@ -18,6 +20,7 @@ public class BookingsController : ControllerBase
 
     [HttpGet("{bookingId}", Name = "GetBooking")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<BookingDetailsDto>> GetBooking(int bookingId)
     {
         var result = new BookingDetailsDto()
@@ -31,10 +34,11 @@ public class BookingsController : ControllerBase
             PaymentMethod = "Cash",
             BookingStatus = "Confirmed",
         };
-        return result;
+        return Ok(result);
     }
 
     [HttpPost]
+    [Authorize(policy:"Admin")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateBooking(BookingDetailsDto bookingDetailsDto)
     {

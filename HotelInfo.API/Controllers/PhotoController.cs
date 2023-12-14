@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelInfo.API.Controllers
 {
@@ -62,6 +63,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="204">Indicates a successful update with no content returned.</response>
         /// <response code="404">Indicates that the specified photo was not found.</response>
         [HttpPut("{photoId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> UpdatePhotoAsync(int photoId, PhotoForUpdateDto photo)
@@ -91,6 +93,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="400">Indicates a bad request due to an invalid patch document or other errors.</response>
         /// <response code="404">Indicates that the specified photo was not found.</response>
         [HttpPatch("{photoId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -126,6 +129,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UploadPhoto([FromForm] FileUpload fileUpload)

@@ -2,6 +2,7 @@
 using HotelInfo.API.Entites;
 using HotelInfo.API.Models;
 using HotelInfo.API.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,6 +54,7 @@ namespace HotelInfo.API.Controllers
         /// </returns>
         /// <response code="201">Returns the newly created room class when the operation is successful.</response>
         [HttpPost]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<RoomClassDto>> CreateRoomClass(RoomClassForCreationDto roomClass)
         {
@@ -78,6 +80,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="204">Indicates a successful update with no content returned.</response>
         /// <response code="404">Indicates that the specified room class was not found.</response>
         [HttpPut("{roomClassId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> UpdateRoomClassAsync(int roomClassId, RoomClassForCreationDto roomClass)
@@ -108,6 +111,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="400">Indicates a bad request due to an invalid patch document or other errors.</response>
         /// <response code="404">Indicates that the specified room class was not found.</response>
         [HttpPatch("{roomClassId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -169,6 +173,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{roomClassId}/photos")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<PhotoDto>> AddPhoto(int roomClassId, PhotoForCreationDto photoForCreationDto)
@@ -201,6 +206,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="204">Indicates a successful deletion with no content returned.</response>
         /// <response code="404">Indicates that the specified room class or photo was not found.</response>
         [HttpDelete("{roomClassId}/photos/{photoId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeletePhoto(int roomClassId, int photoId)
@@ -260,6 +266,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{roomClassId}/amenities")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<RoomAmenityDto>> AddRoomAmenity(int roomClassId,  RoomAmenityForCreationDto roomAmenityForCreationDto)
@@ -292,6 +299,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="204">Indicates a successful deletion with no content returned.</response>
         /// <response code="404">Indicates that the specified room or room amenity was not found.</response>
         [HttpDelete("{roomClassId}/amenities/{roomAmenityId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteRoomAmenity(int roomClassId, int roomAmenityId)
@@ -353,6 +361,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="201">Indicates a successful creation of a room within the room class.</response>
         /// <response code="404">Indicates that the specified room class was not found.</response>
         [HttpPost("{roomClassId}/rooms")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<RoomDto>> AddRoom(int roomClassId, int roomId)
@@ -391,6 +400,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="204">Indicates a successful deletion with no content returned.</response>
         /// <response code="404">Indicates that the specified room class or room was not found.</response>
         [HttpDelete("{roomClassId}/rooms/{roomId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteRoom(int roomClassId, int roomId)

@@ -5,6 +5,7 @@ using HotelInfo.API.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelInfo.API.Controllers
 {
@@ -131,6 +132,7 @@ namespace HotelInfo.API.Controllers
         /// </returns>
         /// <response code="201">Returns the newly created city when the operation is successful.</response>
         [HttpPost]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<CityDto>> CreateCity(CityForCreationDto city)
         {
@@ -156,6 +158,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="204">Indicates a successful update with no content returned.</response>
         /// <response code="404">Indicates that the specified city was not found.</response>
         [HttpPut("{cityId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> UpdateCity(int cityId, CityForUpdateDto cityForUpdateDto) 
@@ -187,6 +190,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="400">Indicates a bad request due to an invalid patch document or other errors.</response>
         /// <response code="404">Indicates that the specified city was not found.</response>
         [HttpPatch("{cityId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -226,6 +230,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="204">Indicates a successful deletion with no content returned.</response>
         /// <response code="404">Indicates that the specified city was not found.</response>
         [HttpDelete("{cityId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteCity(int cityId)
@@ -276,6 +281,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{cityId}/hotels")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<HotelDto>> CreateHotel(int cityId, HotelForCreationDto hotelForCreationDto)
@@ -308,6 +314,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="204">Indicates a successful deletion with no content returned.</response>
         /// <response code="404">Indicates that the specified city or hotel was not found.</response>
         [HttpDelete("{cityId}/hotels/{hotelId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteHotel(int cityId, int hotelId)
@@ -366,6 +373,7 @@ namespace HotelInfo.API.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.
         /// </returns>
         [HttpPost("{cityId}/photos")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<ActionResult<PhotoDto>> AddPhoto(int cityId,  PhotoForCreationDto photoForCreationDto)
@@ -398,6 +406,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="204">Indicates a successful deletion with no content returned.</response>
         /// <response code="404">Indicates that the specified city or photo was not found.</response>
         [HttpDelete("{cityId}/photos/{photoId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeletePhoto(int cityId, int photoId)

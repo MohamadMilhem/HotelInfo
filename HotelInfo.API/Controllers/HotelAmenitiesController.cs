@@ -4,6 +4,7 @@ using HotelInfo.API.Models;
 using HotelInfo.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 
 namespace HotelInfo.API.Controllers
@@ -82,6 +83,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="204">Indicates a successful update with no content returned.</response>
         /// <response code="404">Indicates that the specified hotel amenity was not found.</response>
         [HttpPut("{hotelAmenityId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> UpdateHotelAmenity(int hotelAmenityId, HotelAmenityForUpdateDto hotelAmenityForUpdateDto)
@@ -112,6 +114,7 @@ namespace HotelInfo.API.Controllers
         /// <response code="400">Indicates a bad request due to an invalid patch document or other errors.</response>
         /// <response code="404">Indicates that the specified hotel amenity was not found.</response>
         [HttpPatch("{hotelAmenityId}")]
+        [Authorize(policy:"Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

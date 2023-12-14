@@ -6,6 +6,7 @@ using HotelInfo.API.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.VisualBasic.CompilerServices;
 
@@ -182,6 +183,7 @@ namespace HotelInfo.API.Controllers
         }
 
         [HttpGet("/users/{userId}/recent-hotels")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<RecentHotelResultDto>>> GetRecentlyVisitedHotels(int userId)
         {
             var result = new List<RecentHotelResultDto>()
