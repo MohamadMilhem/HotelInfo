@@ -64,10 +64,10 @@ namespace HotelInfo.API
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = builder.Configuration["Authentication:Issuer"],
-                        ValidAudience = builder.Configuration["Authentication:Audience"],
+                        ValidIssuer = "https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net",
+                        ValidAudience = null,
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.ASCII.GetBytes(builder.Configuration["Authentication:SecretForKey"]))
+                            Encoding.ASCII.GetBytes("thisisthesecretforgeneratingakey(mustbeatleast32bitlong)"))
                     };
                 });
 

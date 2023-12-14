@@ -56,7 +56,7 @@ public class AuthenticationController : ControllerBase
             return Unauthorized();
         }
         var securityKey = new SymmetricSecurityKey(
-            Encoding.ASCII.GetBytes(_configuration["Authentication:SecretForKey"]));
+            Encoding.ASCII.GetBytes("thisisthesecretforgeneratingakey(mustbeatleast32bitlong)"));
         var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var tokenClaims = new List<Claim>();
@@ -65,7 +65,7 @@ public class AuthenticationController : ControllerBase
         tokenClaims.Add(new Claim("family_name", user.LastName));
         tokenClaims.Add(new Claim("userType", user.UserType));
 
-        var jwtSecurityToken = new JwtSecurityToken(_configuration["Authentication:Issuer"],
+        var jwtSecurityToken = new JwtSecurityToken("https://app-hotel-reservation-webapi-uae-dev-001.azurewebsites.net",
             null, tokenClaims, DateTime.UtcNow, DateTime.UtcNow.AddHours(1),
             signingCredentials);
 
