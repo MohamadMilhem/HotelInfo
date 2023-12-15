@@ -23,7 +23,8 @@ namespace HotelInfo.API
                 options.AddPolicy("AllowAnyOrigin",
                     builder => builder.AllowAnyOrigin()
                         .AllowAnyMethod()
-                        .AllowAnyHeader());
+                        .AllowAnyHeader()
+                        .WithExposedHeaders("*"));
             });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
