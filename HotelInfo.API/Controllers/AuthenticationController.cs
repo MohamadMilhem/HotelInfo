@@ -71,7 +71,13 @@ public class AuthenticationController : ControllerBase
 
         var tokenToReturn = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 
-        return Ok(tokenToReturn);
+        var result = new
+        {
+            UserType = user.UserType,
+            Authentication = tokenToReturn
+        };
+
+        return Ok(result);
     }
 
     private HotelInfoUser ValidateCredentials(string? userName, string? password)
