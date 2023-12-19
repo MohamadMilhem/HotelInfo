@@ -60,7 +60,7 @@ public class AuthenticationController : ControllerBase
         var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var tokenClaims = new List<Claim>();
-        tokenClaims.Add(new Claim("sub", user.UserId.ToString()));
+        tokenClaims.Add(new Claim("user_id", user.UserId.ToString()));
         tokenClaims.Add(new Claim("given_name", user.FirstName));
         tokenClaims.Add(new Claim("family_name", user.LastName));
         tokenClaims.Add(new Claim("userType", user.UserType));
