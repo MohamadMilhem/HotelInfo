@@ -76,6 +76,24 @@ namespace HotelInfo.API.Controllers
                     Name = "San Francisco",
                     Description = "San Francisco, perched on the hilly terrain of Northern California, is renowned for its iconic Golden Gate Bridge, historic cable cars, and a rich tech culture in Silicon Valley's vicinity. This city blends Victorian charm with modern innovation, featuring diverse neighborhoods, the famous Alcatraz Island, and a picturesque waterfront. Known for its progressive values and cultural vibrancy, San Francisco stands as a symbol of creativity and innovation on the west coast.",
                 },
+                new CityWithoutHotels()
+                {
+                    Id = 6,
+                    Name = "Paris",
+                    Description = "Fall in love with the romantic charm of Paris, the 'City of Lights.' Admire the Eiffel Tower, stroll along the Seine River, and savor delicious pastries in charming cafes."
+                },
+                new CityWithoutHotels()
+                {
+                    Id = 7,
+                    Name = "Tokyo",
+                    Description = "Immerse yourself in the futuristic cityscape of Tokyo. Discover a perfect blend of traditional temples and modern technology. Experience vibrant street life and exquisite Japanese cuisine.",
+                },
+                new CityWithoutHotels()
+                {
+                    Id = 8,
+                    Name = "Cape Town",
+                    Description = "Enjoy the breathtaking landscapes of Cape Town. From the iconic Table Mountain to pristine beaches, experience the natural beauty and cultural richness of this South African gem.",
+                }
             };
             /*
             var (cityEntities, paginationMetaData) = await _hotelInfoRepository.GetCitiesAsync(name, searchQuery, pageSize, pageNumber);

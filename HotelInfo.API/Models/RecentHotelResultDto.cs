@@ -2,6 +2,7 @@
 
 public class RecentHotelResultDto
 {
+    public int HotelId { get; set; }
     public string HotelName { get; set; }
     public int StarRating { get; set; }
     public DateTime VisitDate { get; set; }

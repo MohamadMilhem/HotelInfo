@@ -4,6 +4,7 @@ namespace HotelInfo.API.Models;
 
 public class FeaturedDealDto
 {
+    public int HotelId { get; set; }
     public decimal OriginalRoomPrice { get; set; }
     public decimal Discount { get; set; }
     public decimal FinalPrice { get; set; }

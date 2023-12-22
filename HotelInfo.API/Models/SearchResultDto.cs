@@ -2,6 +2,7 @@
 
 public class SearchResultDto
 {
+    public int HotelId { get; set; }
     public string HotelName { get; set; } = String.Empty;
     public int StarRating { get; set; }
     public decimal Latitude { get; set; }

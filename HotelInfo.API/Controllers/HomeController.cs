@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Security.Cryptography;
 using AutoMapper;
 using HotelInfo.API.Entites;
 using HotelInfo.API.Models;
@@ -34,6 +35,7 @@ namespace HotelInfo.API.Controllers
             {
                 new SearchResultDto()
                 {
+                    HotelId = 1,
                     HotelName = "Plaza Hotel",
                     Latitude = (decimal)12.32342342,
                     Longitude = (decimal)32.23245675,
@@ -59,6 +61,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new SearchResultDto()
                 {
+                    HotelId = 2,
                     HotelName = "Sunset Resort",
                     Latitude = (decimal)34.123456,
                     Longitude = (decimal)-118.321654,
@@ -84,6 +87,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new SearchResultDto()
                 {
+                    HotelId = 3,
                     HotelName = "Ocean View Inn",
                     Latitude = (decimal)40.712776,
                     Longitude = (decimal)-74.005974,
@@ -109,6 +113,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new SearchResultDto()
                 {
+                    HotelId = 4,
                     HotelName = "Mountain Retreat",
                     Latitude = (decimal)39.550051,
                     Longitude = (decimal)-105.782067,
@@ -134,6 +139,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new SearchResultDto()
                 {
+                    HotelId = 5,
                     HotelName = "Seaside Retreat",
                     Latitude = (decimal)37.774929,
                     Longitude = (decimal)-122.419416,
@@ -190,6 +196,7 @@ namespace HotelInfo.API.Controllers
             {
                 new RecentHotelResultDto()
                 {
+                    HotelId = 1,
                     HotelName = "Plaza Hotel",
                     StarRating = 5,
                     VisitDate = new DateTime(2022, 11, 24),
@@ -198,6 +205,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RecentHotelResultDto()
                 {
+                    HotelId = 2,
                     HotelName = "Sunset Resort",
                     StarRating = 4,
                     VisitDate = new DateTime(2022, 10, 15),
@@ -206,6 +214,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RecentHotelResultDto()
                 {
+                    HotelId = 3,
                     HotelName = "Ocean View Inn",
                     StarRating = 3,
                     VisitDate = new DateTime(2022, 9, 5),
@@ -214,6 +223,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RecentHotelResultDto()
                 {
+                    HotelId = 4,
                     HotelName = "Mountain Retreat",
                     StarRating = 4,
                     VisitDate = new DateTime(2022, 8, 20),
@@ -222,6 +232,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RecentHotelResultDto()
                 {
+                    HotelId = 5,
                     HotelName = "Seaside Retreat",
                     StarRating = 4,
                     VisitDate = new DateTime(2022, 7, 10),
@@ -241,6 +252,7 @@ namespace HotelInfo.API.Controllers
             {
                     new FeaturedDealDto()
                     {
+                        HotelId = 1,
                         OriginalRoomPrice = 200,
                         Discount = (decimal)0.50,
                         FinalPrice = 100,
@@ -253,6 +265,7 @@ namespace HotelInfo.API.Controllers
                     },
                     new FeaturedDealDto()
                     {
+                        HotelId = 2,
                         OriginalRoomPrice = 150,
                         Discount = (decimal)0.40,
                         FinalPrice = 90,
@@ -265,18 +278,7 @@ namespace HotelInfo.API.Controllers
                     },
                     new FeaturedDealDto()
                     {
-                        OriginalRoomPrice = 120,
-                        Discount = (decimal)0.30,
-                        FinalPrice = 84,
-                        CityName = "New York",
-                        HotelName = "Metropolitan Suites",
-                        HotelStarRating = 4,
-                        Title = "Metropolitan Suite",
-                        Description = "Indulge in luxury with our Metropolitan Suite at Metropolitan Suites. Experience modern elegance, sophisticated design, and top-notch amenities in the heart of New York City.",
-                        RoomPhotoUrl = "https://images.pexels.com/photos/2736388/pexels-photo-2736388.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                    },
-                    new FeaturedDealDto()
-                    {
+                        HotelId = 4,
                         OriginalRoomPrice = 180,
                         Discount = (decimal)0.45,
                         FinalPrice = 99,
@@ -289,14 +291,15 @@ namespace HotelInfo.API.Controllers
                     },
                     new FeaturedDealDto()
                     {
+                        HotelId = 5,
                         OriginalRoomPrice = 130,
                         Discount = (decimal)0.35,
                         FinalPrice = 85,
                         CityName = "San Francisco",
-                        HotelName = "Seaside Haven",
+                        HotelName = "Seaside Retreat",
                         HotelStarRating = 4,
-                        Title = "Seaside Escape",
-                        Description = "Embrace the coastal charm at Seaside Haven. Our Seaside Escape package offers a comfortable stay with ocean views and convenient access to the city's attractions.",
+                        Title = "Seaside Retreat",
+                        Description = "Embrace the coastal charm at Seaside Retreat. Our Seaside Escape package offers a comfortable stay with ocean views and convenient access to the city's attractions.",
                         RoomPhotoUrl = "https://images.pexels.com/photos/2873951/pexels-photo-2873951.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
                     }
             };
@@ -310,6 +313,7 @@ namespace HotelInfo.API.Controllers
             {
                 new Destination()
                 {
+                    CityId = 1,
                     CityName = "Ramallah",
                     CountryName = "Palestine",
                     Description = "Explore the vibrant city of Ramallah, known for its rich history and cultural diversity. Discover historical landmarks, bustling markets, and enjoy the warmth of Palestinian hospitality.",
@@ -317,6 +321,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new Destination()
                 {
+                    CityId = 3,
                     CityName = "New York",
                     CountryName = "United States",
                     Description = "Experience the iconic cityscape of New York, where skyscrapers touch the clouds and diverse cultures converge. Visit famous landmarks, explore Central Park, and indulge in world-class dining.",
@@ -324,6 +329,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new Destination()
                 {
+                    CityId = 6,
                     CityName = "Paris",
                     CountryName = "France",
                     Description = "Fall in love with the romantic charm of Paris, the 'City of Lights.' Admire the Eiffel Tower, stroll along the Seine River, and savor delicious pastries in charming cafes.",
@@ -331,6 +337,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new Destination()
                 {
+                    CityId = 7,
                     CityName = "Tokyo",
                     CountryName = "Japan",
                     Description = "Immerse yourself in the futuristic cityscape of Tokyo. Discover a perfect blend of traditional temples and modern technology. Experience vibrant street life and exquisite Japanese cuisine.",
@@ -338,6 +345,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new Destination()
                 {
+                    CityId = 8,
                     CityName = "Cape Town",
                     CountryName = "South Africa",
                     Description = "Enjoy the breathtaking landscapes of Cape Town. From the iconic Table Mountain to pristine beaches, experience the natural beauty and cultural richness of this South African gem.",
