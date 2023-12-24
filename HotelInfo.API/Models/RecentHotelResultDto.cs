@@ -8,4 +8,6 @@ public class RecentHotelResultDto
     public DateTime VisitDate { get; set; }
     public string CityName { get; set; }
     public string? ThumbnailUrl { get; set; }
+    public int PriceLowerBound { get; set; }
+    public int PriceUpperBound { get; set; }
 }

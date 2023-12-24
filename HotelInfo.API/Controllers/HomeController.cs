@@ -201,7 +201,9 @@ namespace HotelInfo.API.Controllers
                     StarRating = 5,
                     VisitDate = new DateTime(2022, 11, 24),
                     CityName = "Ramallah",
-                    ThumbnailUrl = "https://cf.bstatic.com/xdata/images/hotel/max1024x768/98271882.jpg?k=cc5964ba081d4c585e3daa9d1c532a8c002c563637238f9bc94896c5daa98496&o=&hp=1"
+                    ThumbnailUrl = "https://cf.bstatic.com/xdata/images/hotel/max1024x768/98271882.jpg?k=cc5964ba081d4c585e3daa9d1c532a8c002c563637238f9bc94896c5daa98496&o=&hp=1",
+                    PriceLowerBound = 100,
+                    PriceUpperBound = 1000,
                 },
                 new RecentHotelResultDto()
                 {
@@ -210,7 +212,9 @@ namespace HotelInfo.API.Controllers
                     StarRating = 4,
                     VisitDate = new DateTime(2022, 10, 15),
                     CityName = "Los Angeles",
-                    ThumbnailUrl = "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/2a/c2/96/sunset-resort.jpg?w=700&h=-1&s=1"
+                    ThumbnailUrl = "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/2a/c2/96/sunset-resort.jpg?w=700&h=-1&s=1",
+                    PriceLowerBound = 300,
+                    PriceUpperBound = 2000,
                 },
                 new RecentHotelResultDto()
                 {
@@ -219,7 +223,9 @@ namespace HotelInfo.API.Controllers
                     StarRating = 3,
                     VisitDate = new DateTime(2022, 9, 5),
                     CityName = "New York",
-                    ThumbnailUrl = "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    ThumbnailUrl = "https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=600",
+                    PriceLowerBound = 500,
+                    PriceUpperBound = 2500,
                 },
                 new RecentHotelResultDto()
                 {
@@ -228,7 +234,9 @@ namespace HotelInfo.API.Controllers
                     StarRating = 4,
                     VisitDate = new DateTime(2022, 8, 20),
                     CityName = "Denver",
-                    ThumbnailUrl = "https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                    ThumbnailUrl = "https://images.pexels.com/photos/2034335/pexels-photo-2034335.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    PriceLowerBound = 700,
+                    PriceUpperBound = 2200,
                 },
                 new RecentHotelResultDto()
                 {
@@ -237,7 +245,9 @@ namespace HotelInfo.API.Controllers
                     StarRating = 4,
                     VisitDate = new DateTime(2022, 7, 10),
                     CityName = "San Francisco",
-                    ThumbnailUrl = "https://images.pexels.com/photos/1134176/pexels-photo-1134176.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                    ThumbnailUrl = "https://images.pexels.com/photos/1134176/pexels-photo-1134176.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                    PriceLowerBound = 1000,
+                    PriceUpperBound = 2000,
                 }
             };
 
