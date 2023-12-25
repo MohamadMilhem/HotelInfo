@@ -188,7 +188,7 @@ namespace HotelInfo.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/users/{userId}/recent-hotels")]
+        [HttpGet("users/{userId}/recent-hotels")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<RecentHotelResultDto>>> GetRecentlyVisitedHotels(int userId)
         {
@@ -316,7 +316,7 @@ namespace HotelInfo.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/destinations/trending")]
+        [HttpGet("destinations/trending")]
         public async Task<ActionResult<IEnumerable<Destination>>> GetTrendingDestinations()
         {
             var result = new List<Destination>()
