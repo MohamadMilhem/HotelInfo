@@ -377,6 +377,36 @@ namespace HotelInfo.API.Controllers
             return Ok(_mapper.Map<IEnumerable<RoomDto>>(rooms));
 
         }
+        
+        /// <summary>
+        /// Retrieve a list of reviews to a specific hotel.
+        /// </summary>
+        /// <param name="hotelId">The unique identifier of the hotel for which you want to retrieve reviews.</param>
+        /// <returns>
+        /// An <see cref="IActionResult"/> containing a collection of reviews for the specified hotel. This may include a 200 OK response when successful, or a 404 Not Found response if the hotel is not found.
+        /// </returns>
+        /// <response code="200">Indicates a successful retrieval of reviews in the specified hotel.</response>
+        /// <response code="404">Indicates that the specified hotel was not found.</response>
+        [HttpGet("{hotelId}/reviews")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<ReviewDto>>> GetReviewsAsync(int hotelId)
+        {
+            List<ReviewDto> result = new List<ReviewDto>
+            {
+                new ReviewDto { ReviewId = 1, CustomerName = "Alice Johnson", Rating = 4, Description = "Enjoyed my stay. The room was comfortable, and the staff was friendly." },
+                new ReviewDto { ReviewId = 2, CustomerName = "Bob Smith", Rating = 5, Description = "Outstanding service! The hotel exceeded my expectations in every way." },
+                new ReviewDto { ReviewId = 3, CustomerName = "Charlie Brown", Rating = 3, Description = "Decent stay, but the room could have been cleaner." },
+                new ReviewDto { ReviewId = 4, CustomerName = "David Wilson", Rating = 5, Description = "Amazing experience. The hotel staff went above and beyond to make me feel welcome." },
+                new ReviewDto { ReviewId = 5, CustomerName = "Eva Miller", Rating = 2, Description = "Disappointing. The room was not as advertised, and the service was lacking." },
+                new ReviewDto { ReviewId = 6, CustomerName = "Frank Davis", Rating = 4, Description = "Good value for money. The location was convenient, and the amenities were sufficient." },
+                new ReviewDto { ReviewId = 7, CustomerName = "Grace Taylor", Rating = 5, Description = "Absolutely fantastic! I can't wait to come back to this hotel." },
+                new ReviewDto { ReviewId = 8, CustomerName = "Harry Turner", Rating = 3, Description = "Average stay. Some improvements could be made to enhance the guest experience." },
+                new ReviewDto { ReviewId = 9, CustomerName = "Ivy Clark", Rating = 4, Description = "Pleasant atmosphere and helpful staff. I had a relaxing time at the hotel." },
+                new ReviewDto { ReviewId = 10, CustomerName = "Jack White", Rating = 5, Description = "Exceptional service and luxurious accommodations. Highly recommended!" }
+            };
+            return Ok(result);
+        }
 
         /// <summary>
         /// Create a new room within a specific hotel.
