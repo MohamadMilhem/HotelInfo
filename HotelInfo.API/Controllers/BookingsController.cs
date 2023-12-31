@@ -19,6 +19,7 @@ public class BookingsController : ControllerBase
     }
 
     [HttpGet("{bookingId}", Name = "GetBooking")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<BookingDetailsDto>> GetBooking(int bookingId)
@@ -38,6 +39,7 @@ public class BookingsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateBooking(BookingDetailsDto bookingDetailsDto)
     {
