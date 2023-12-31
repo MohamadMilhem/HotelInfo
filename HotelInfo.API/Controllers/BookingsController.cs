@@ -38,7 +38,6 @@ public class BookingsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(policy:"Admin")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateBooking(BookingDetailsDto bookingDetailsDto)
     {
