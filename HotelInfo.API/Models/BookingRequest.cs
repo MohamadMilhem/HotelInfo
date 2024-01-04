@@ -1,6 +1,6 @@
 ﻿namespace HotelInfo.API.Models;
 
-public class BookingDetailsDto
+public class BookingRequest
 {
     public string CustomerName { get; set; } = String.Empty;
     public string HotelName { get; set; } = String.Empty;
@@ -9,6 +9,4 @@ public class BookingDetailsDto
     public DateTime BookingDateTime { get; set; }
     public decimal TotalCost { get; set; }
     public string PaymentMethod { get; set; } = String.Empty;
-    public string BookingStatus { get; set; } = String.Empty;
-    public string ConfirmationNumber { get; set; } = String.Empty;
 }

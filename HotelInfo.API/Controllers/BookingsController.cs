@@ -24,6 +24,8 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<BookingDetailsDto>> GetBooking(int bookingId)
     {
+        string datePart = DateTime.Now.ToString("yyyyMMdd");
+        string randomPart = new Random().Next(1000, 9999).ToString();
         var result = new BookingDetailsDto()
         {
             CustomerName = "Mazen",
@@ -34,6 +36,7 @@ public class BookingsController : ControllerBase
             TotalCost = 2000,
             PaymentMethod = "Cash",
             BookingStatus = "Confirmed",
+            ConfirmationNumber = $"{datePart}-{randomPart}"
         };
         return Ok(result);
     }
@@ -41,8 +44,22 @@ public class BookingsController : ControllerBase
     [HttpPost]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateBooking(BookingDetailsDto bookingDetailsDto)
+    public async Task<IActionResult> CreateBooking(BookingRequest bookingRequest)
     {
-        return CreatedAtRoute("GetBooking", new {bookingId = 3}, bookingDetailsDto);
+        string datePart = DateTime.Now.ToString("yyyyMMdd");
+        string randomPart = new Random().Next(1000, 9999).ToString();
+        var result = new BookingDetailsDto()
+        {
+            CustomerName = "Mazen",
+            HotelName = "Gaza Hotel",
+            RoomNumber = "313",
+            RoomType = "Suite",
+            BookingDateTime = new DateTime(2023, 10, 7, 6, 25, 0),
+            TotalCost = 2000,
+            PaymentMethod = "Cash",
+            BookingStatus = "Confirmed",
+            ConfirmationNumber = $"{datePart}-{randomPart}"
+        };
+        return CreatedAtRoute("GetBooking", new {bookingId = 3}, result);
     }
 }
