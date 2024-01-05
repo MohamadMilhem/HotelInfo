@@ -11,4 +11,5 @@ public class HotelDetailedDto
     public int StarRating { get; set; }
     public int AvailableRooms { get; set; }
     public string ImageUrl { get; set; }    
+    public int CityId { get; set; }
 }

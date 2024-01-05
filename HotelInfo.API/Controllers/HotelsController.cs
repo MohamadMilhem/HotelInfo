@@ -83,6 +83,7 @@ namespace HotelInfo.API.Controllers
                         { Name = "Swimming Pool", Description = "Relax by the poolside and enjoy a refreshing swim." }
                 },
                 StarRating = 5,
+                CityId = 1,
                 AvailableRooms = 50,
                 Longitude =  (decimal)35.206938,
                 Latitude = (decimal)31.916989,
@@ -198,6 +199,7 @@ namespace HotelInfo.API.Controllers
             {
                 new RoomAvailabilityResultDto()
                 {
+                    RoomId = 1,
                     RoomNumber = 101,
                     RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33143786.jpg?k=4d0bca9d9795b80beb2cd9786946e043b23d1372eb633d5855d3aba6343d68d4&o=&hp=1",
                     RoomType = "Standard",
@@ -214,6 +216,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RoomAvailabilityResultDto()
                 {
+                    RoomId = 2,
                     RoomNumber = 201,
                     RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33144464.jpg?k=98997407dcb7957422ca16005b3d19b574ff93b3097e8802fc1f6862eb041e2b&o=&hp=1",
                     RoomType = "Suite",
@@ -230,6 +233,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RoomAvailabilityResultDto()
                 {
+                    RoomId = 3,
                     RoomNumber = 301,
                     RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/31823343.jpg?k=cbd94934282436e4989a72c9bdf725fa45d668902fe7ebc745d8986b73452e18&o=&hp=1",
                     RoomType = "Deluxe",
@@ -246,6 +250,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RoomAvailabilityResultDto()
                 {
+                    RoomId = 4,
                     RoomNumber = 401,
                     RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33518061.jpg?k=f1817f9efd359ed681c1c5ca21faf9374a124f24788ce8a21c0d3d24a098386f&o=&hp=1",
                     RoomType = "Economy",
@@ -261,6 +266,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RoomAvailabilityResultDto()
                 {
+                    RoomId = 5,
                     RoomNumber = 501,
                     RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33142365.jpg?k=edd59d67083a8d9d3c984a43fb270a7faad8d76ec5bfd82ab64e31293e2aa022&o=&hp=1",
                     RoomType = "Family Suite",
@@ -277,6 +283,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RoomAvailabilityResultDto()
                 {
+                    RoomId = 6,
                     RoomNumber = 601,
                     RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33142495.jpg?k=9956c92b062724ceb086158d062ca22b4d10a5737fd2fc08879f44d2842d5091&o=&hp=1",
                     RoomType = "Executive Suite",
@@ -316,6 +323,7 @@ namespace HotelInfo.API.Controllers
             {
                 new RoomAvailabilityResultDto()
                 {
+                    RoomId = 1,
                     RoomNumber = 101,
                     RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33143786.jpg?k=4d0bca9d9795b80beb2cd9786946e043b23d1372eb633d5855d3aba6343d68d4&o=&hp=1",
                     RoomType = "Standard",
@@ -332,6 +340,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RoomAvailabilityResultDto()
                 {
+                    RoomId = 3,
                     RoomNumber = 301,
                     RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/31823343.jpg?k=cbd94934282436e4989a72c9bdf725fa45d668902fe7ebc745d8986b73452e18&o=&hp=1",
                     RoomType = "Deluxe",
@@ -348,6 +357,7 @@ namespace HotelInfo.API.Controllers
                 },
                 new RoomAvailabilityResultDto()
                 {
+                    RoomId = 6,
                     RoomNumber = 601,
                     RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33142495.jpg?k=9956c92b062724ceb086158d062ca22b4d10a5737fd2fc08879f44d2842d5091&o=&hp=1",
                     RoomType = "Executive Suite",

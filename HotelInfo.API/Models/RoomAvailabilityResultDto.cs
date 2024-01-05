@@ -2,6 +2,7 @@
 
 public class RoomAvailabilityResultDto
 {
+    public int RoomId { get; set; }
     public int RoomNumber { get; set; }
     public string? RoomPhotoUrl { get; set; }
     public string? RoomType { get; set; }
