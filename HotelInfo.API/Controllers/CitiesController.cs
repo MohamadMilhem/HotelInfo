@@ -5,7 +5,9 @@ using HotelInfo.API.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using CityInfo.API.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace HotelInfo.API.Controllers
 {
@@ -44,7 +46,7 @@ namespace HotelInfo.API.Controllers
                 pageSize = maxPageSize;
             }
 
-            var results = new List<CityWithoutHotels>()
+            IEnumerable<CityWithoutHotels> results = new List<CityWithoutHotels>()
             {
                 new CityWithoutHotels()
                 {
@@ -103,13 +105,31 @@ namespace HotelInfo.API.Controllers
 
             return Ok(results);
             */
-            results = results
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                name = name.Trim();
+                results = results.Where(c => c.Name.Contains(name));
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                searchQuery = searchQuery.Trim();
+                results = results.Where(a => a.Name.Contains(searchQuery)
+                                             || (!string.IsNullOrWhiteSpace(a.Description) &&
+                                                 a.Description.Contains(searchQuery)));
+            }
+
+            //var itemsCount =  collection.Count();
+
+            //var paginationMetaData = new PaginationMetaData(pageNumber, itemsCount, pageSize);
+
+            var collectionToReturn = results
                 .OrderBy(c => c.Name)
                 .Skip(pageSize * (pageNumber - 1))
                 .Take(pageSize)
                 .ToList();
 
-            return Ok(results);
+            return Ok(collectionToReturn);
         }
         /// <summary>
         /// Get detailed information about a city by its unique identifier.
