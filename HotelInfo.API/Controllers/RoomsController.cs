@@ -35,6 +35,121 @@ namespace HotelInfo.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetRoomAsync(int roomId)
         {
+            var result =  new List<RoomAvailabilityResultDto>()
+            {
+                new RoomAvailabilityResultDto()
+                {
+                    RoomId = 1,
+                    RoomNumber = 101,
+                    RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33143786.jpg?k=4d0bca9d9795b80beb2cd9786946e043b23d1372eb633d5855d3aba6343d68d4&o=&hp=1",
+                    RoomType = "Standard",
+                    CapacityOfAdults = 2,
+                    CapacityOfChildren = 1,
+                    RoomAmenities = new List<FilterAmenityDto>()
+                    {
+                        new FilterAmenityDto() { Name = "Free Wi-Fi", Description = "High-speed internet available in all rooms." },
+                        new FilterAmenityDto() { Name = "TV", Description = "Flat-screen TV with cable channels." },
+                        new FilterAmenityDto() { Name = "Air Conditioning", Description = "Individually controlled air conditioning." }
+                    },
+                    Price = 150,
+                    Availability = true
+                },
+                new RoomAvailabilityResultDto()
+                {
+                    RoomId = 2,
+                    RoomNumber = 201,
+                    RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33144464.jpg?k=98997407dcb7957422ca16005b3d19b574ff93b3097e8802fc1f6862eb041e2b&o=&hp=1",
+                    RoomType = "Suite",
+                    CapacityOfAdults = 3,
+                    CapacityOfChildren = 0,
+                    RoomAmenities = new List<FilterAmenityDto>()
+                    {
+                        new FilterAmenityDto() { Name = "Jacuzzi", Description = "Private jacuzzi for relaxation." },
+                        new FilterAmenityDto() { Name = "Mini Bar", Description = "Stocked mini bar with a selection of beverages." },
+                        new FilterAmenityDto() { Name = "Ocean View", Description = "Stunning ocean view from the room." }
+                    },
+                    Price = 250,
+                    Availability = false // Not available
+                },
+                new RoomAvailabilityResultDto()
+                {
+                    RoomId = 3,
+                    RoomNumber = 301,
+                    RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/31823343.jpg?k=cbd94934282436e4989a72c9bdf725fa45d668902fe7ebc745d8986b73452e18&o=&hp=1",
+                    RoomType = "Deluxe",
+                    CapacityOfAdults = 2,
+                    CapacityOfChildren = 2,
+                    RoomAmenities = new List<FilterAmenityDto>()
+                    {
+                        new FilterAmenityDto() { Name = "King Size Bed", Description = "Spacious king-size bed for a comfortable stay." },
+                        new FilterAmenityDto() { Name = "City View", Description = "Enjoy a panoramic view of the city." },
+                        new FilterAmenityDto() { Name = "Room Service", Description = "24/7 room service available." }
+                    },
+                    Price = 180,
+                    Availability = true
+                },
+                new RoomAvailabilityResultDto()
+                {
+                    RoomId = 4,
+                    RoomNumber = 401,
+                    RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33518061.jpg?k=f1817f9efd359ed681c1c5ca21faf9374a124f24788ce8a21c0d3d24a098386f&o=&hp=1",
+                    RoomType = "Economy",
+                    CapacityOfAdults = 1,
+                    CapacityOfChildren = 0,
+                    RoomAmenities = new List<FilterAmenityDto>()
+                    {
+                        new FilterAmenityDto() { Name = "Budget-Friendly", Description = "An economical choice for solo travelers." },
+                        new FilterAmenityDto() { Name = "Single Bed", Description = "Comfortable single bed for a restful sleep." }
+                    },
+                    Price = 80,
+                    Availability = false // Not available
+                },
+                new RoomAvailabilityResultDto()
+                {
+                    RoomId = 5,
+                    RoomNumber = 501,
+                    RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33142365.jpg?k=edd59d67083a8d9d3c984a43fb270a7faad8d76ec5bfd82ab64e31293e2aa022&o=&hp=1",
+                    RoomType = "Family Suite",
+                    CapacityOfAdults = 4,
+                    CapacityOfChildren = 2,
+                    RoomAmenities = new List<FilterAmenityDto>()
+                    {
+                        new FilterAmenityDto() { Name = "Adjoining Rooms", Description = "Ideal for families with connecting rooms." },
+                        new FilterAmenityDto() { Name = "Kitchenette", Description = "Convenient kitchenette for family meals." },
+                        new FilterAmenityDto() { Name = "Play Area", Description = "Dedicated play area for children." }
+                    },
+                    Price = 300,
+                    Availability = false // Not available
+                },
+                new RoomAvailabilityResultDto()
+                {
+                    RoomId = 6,
+                    RoomNumber = 601,
+                    RoomPhotoUrl = "https://cf.bstatic.com/xdata/images/hotel/max1280x900/33142495.jpg?k=9956c92b062724ceb086158d062ca22b4d10a5737fd2fc08879f44d2842d5091&o=&hp=1",
+                    RoomType = "Executive Suite",
+                    CapacityOfAdults = 2,
+                    CapacityOfChildren = 1,
+                    RoomAmenities = new List<FilterAmenityDto>()
+                    {
+                        new FilterAmenityDto() { Name = "Business Center Access", Description = "Exclusive access to the hotel's business center." },
+                        new FilterAmenityDto() { Name = "Meeting Room", Description = "Private meeting room for business needs." },
+                        new FilterAmenityDto() { Name = "Complimentary Breakfast", Description = "Daily complimentary breakfast included." }
+                    },
+                    Price = 220,
+                    Availability = true
+                },
+                // Add more room availability data here...
+            };
+            var room = result.SingleOrDefault(room => room.RoomId == roomId);
+
+            if (room == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(room);
+            
+            /*
             var room = await _hotelInfoRepository.GetRoomAsync(roomId);
 
             if (room == null)
@@ -43,7 +158,7 @@ namespace HotelInfo.API.Controllers
             }
 
             return Ok(_mapper.Map<RoomDto>(room));
-
+            */
         }
 
 
