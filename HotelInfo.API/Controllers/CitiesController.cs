@@ -273,6 +273,7 @@ namespace HotelInfo.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> DeleteCity(int cityId)
         {
+            /*
             if (!await _hotelInfoRepository.CityExistsAsync(cityId))
             {
                 return NotFound();
@@ -284,7 +285,7 @@ namespace HotelInfo.API.Controllers
             _hotelInfoRepository.DeleteCity(city);
 
             await _hotelInfoRepository.SaveChangesAsync();
-
+            */
             return NoContent();
         }
         /// <summary>
