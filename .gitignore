@@ -361,3 +361,13 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+#Custom
+appsettings.Development.json 
+HotelInfoContext.dgml 
+.idea 
+.config 
+ServiceDependencies
+serviceDependencies.json
+*.designer.cs
