@@ -1,0 +1,10 @@
+﻿services:
+  hotelinfo.api:
+    image: hotelinfo.api
+    ports:
+      - 5076:5076
+    build:
+      context: .
+      dockerfile: HotelInfo.API/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
